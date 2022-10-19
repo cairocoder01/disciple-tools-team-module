@@ -1,27 +1,27 @@
 <?php
 /**
- * Plugin Name: Disciple.Tools - Plugin Starter Template
- * Plugin URI: https://github.com/DiscipleTools/disciple-tools-plugin-starter-template
- * Description: Disciple.Tools - Plugin Starter Template is intended to help developers and integrator jumpstart their extension of the Disciple.Tools system.
- * Text Domain: disciple-tools-plugin-starter-template
+ * Plugin Name: Disciple.Tools - Team Module
+ * Plugin URI: https://github.com/cairocoder01/disciple-tools-team-module
+ * Description: Disciple.Tools - Team Module is intended to help developers and integrator jumpstart their extension of the Disciple.Tools system.
+ * Text Domain: disciple-tools-team-module
  * Domain Path: /languages
  * Version:  0.1
- * Author URI: https://github.com/DiscipleTools
- * GitHub Plugin URI: https://github.com/DiscipleTools/disciple-tools-plugin-starter-template
+ * Author URI: https://github.com/cairocoder01
+ * GitHub Plugin URI: https://github.com/cairocoder01/disciple-tools-team-module
  * Requires at least: 4.7.0
  * (Requires 4.7+ because of the integration of the REST API at 4.7 and the security requirements of this milestone version.)
  * Tested up to: 5.6
  *
  * @package Disciple_Tools
- * @link    https://github.com/DiscipleTools
+ * @link    https://github.com/cairocoder01
  * @license GPL-2.0 or later
  *          https://www.gnu.org/licenses/gpl-2.0.html
  */
 
 /**
  * Refactoring (renaming) this plugin as your own:
- * 1. @todo Rename the `disciple-tools-plugin-starter-template.php file.
- * 2. @todo Refactor all occurrences of the name Disciple_Tools_Plugin_Starter_Template, disciple_tools_plugin_starter_template, disciple-tools-plugin-starter-template, starter_post_type, and "Plugin Starter Template"
+ * 1. @todo Rename the `disciple-tools-team-module.php file.
+ * 2. @todo Refactor all occurrences of the name Disciple_Tools_Team_Module, disciple_tools_team_module, disciple-tools-team-module, team_post_type, and "Team Module"
  * 3. @todo Update the README.md and LICENSE
  * 4. @todo Update the default.pot file if you intend to make your plugin multilingual. Use a tool like POEdit
  */
@@ -31,14 +31,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Gets the instance of the `Disciple_Tools_Plugin_Starter_Template` class.
+ * Gets the instance of the `Disciple_Tools_Team_Module` class.
  *
  * @since  0.1
  * @access public
  * @return object|bool
  */
-function disciple_tools_plugin_starter_template() {
-    $disciple_tools_plugin_starter_template_required_dt_theme_version = '1.19';
+function disciple_tools_team_module() {
+    $disciple_tools_team_module_required_dt_theme_version = '1.19';
     $wp_theme = wp_get_theme();
     $version = $wp_theme->version;
 
@@ -46,8 +46,8 @@ function disciple_tools_plugin_starter_template() {
      * Check if the Disciple.Tools theme is loaded and is the latest required version
      */
     $is_theme_dt = class_exists( 'Disciple_Tools' );
-    if ( $is_theme_dt && version_compare( $version, $disciple_tools_plugin_starter_template_required_dt_theme_version, '<' ) ) {
-        add_action( 'admin_notices', 'disciple_tools_plugin_starter_template_hook_admin_notice' );
+    if ( $is_theme_dt && version_compare( $version, $disciple_tools_team_module_required_dt_theme_version, '<' ) ) {
+        add_action( 'admin_notices', 'disciple_tools_team_module_hook_admin_notice' );
         add_action( 'wp_ajax_dismissed_notice_handler', 'dt_hook_ajax_notice_handler' );
         return false;
     }
@@ -61,15 +61,15 @@ function disciple_tools_plugin_starter_template() {
         require_once get_template_directory() . '/dt-core/global-functions.php';
     }
 
-    return Disciple_Tools_Plugin_Starter_Template::instance();
+    return Disciple_Tools_Team_Module::instance();
 
 }
-add_action( 'after_setup_theme', 'disciple_tools_plugin_starter_template', 20 );
+add_action( 'after_setup_theme', 'disciple_tools_team_module', 20 );
 
 //register the D.T Plugin
 add_filter( 'dt_plugins', function ( $plugins ){
     $plugin_data = get_file_data( __FILE__, [ 'Version' => 'Version', 'Plugin Name' => 'Plugin Name' ], false );
-    $plugins['disciple-tools-plugin-starter-template'] = [
+    $plugins['disciple-tools-team-module'] = [
         'plugin_url' => trailingslashit( plugin_dir_url( __FILE__ ) ),
         'version' => $plugin_data['Version'] ?? null,
         'name' => $plugin_data['Plugin Name'] ?? null,
@@ -83,7 +83,7 @@ add_filter( 'dt_plugins', function ( $plugins ){
  * @since  0.1
  * @access public
  */
-class Disciple_Tools_Plugin_Starter_Template {
+class Disciple_Tools_Team_Module {
 
     private static $_instance = null;
     public static function instance() {
@@ -96,51 +96,10 @@ class Disciple_Tools_Plugin_Starter_Template {
     private function __construct() {
         $is_rest = dt_is_rest();
         /**
-         * @todo Decide if you want to use the REST API example
-         * To remove: delete this following line and remove the folder named /rest-api
-         */
-        if ( $is_rest && strpos( dt_get_url_path(), 'disciple-tools-plugin-starter-template' ) !== false ) {
-            require_once( 'rest-api/rest-api.php' ); // adds starter rest api class
-        }
-
-        /**
          * @todo Decide if you want to create a new post type
          * To remove: delete the line below and remove the folder named /post-type
          */
         require_once( 'post-type/loader.php' ); // add starter post type extension to Disciple.Tools system
-
-        /**
-         * @todo Decide if you want to create a custom site-to-site link
-         * To remove: delete the line below and remove the folder named /site-link
-         */
-        require_once( 'site-link/custom-site-to-site-links.php' ); // add site to site link class and capabilities
-
-        /**
-         * @todo Decide if you want to add new charts to the metrics section
-         * To remove: delete the line below and remove the folder named /charts
-         */
-        if ( strpos( dt_get_url_path(), 'metrics' ) !== false || ( $is_rest && strpos( dt_get_url_path(), 'disciple-tools-plugin-starter-template-metrics' ) !== false ) ){
-            require_once( 'charts/charts-loader.php' );  // add custom charts to the metrics area
-        }
-
-        /**
-         * @todo Decide if you want to add a custom tile or settings page tile
-         * To remove: delete the lines below and remove the folder named /tile
-         */
-        require_once( 'tile/custom-tile.php' ); // add custom tile
-        if ( 'settings' === dt_get_url_path() && ! $is_rest ) {
-            require_once( 'tile/settings-tile.php' ); // add custom settings page tile
-        }
-
-        /**
-         * @todo Decide if you want to create a magic link
-         * To remove: delete the line below and remove the folder named /magic-link
-         */
-        require_once( 'magic-link/post-type-magic-link/magic-link-post-type.php' );
-        require_once( 'magic-link/magic-link-user-app.php' );
-        require_once( 'magic-link/magic-link-non-object.php' );
-        require_once( 'magic-link/magic-link-map.php' );
-//        require_once( 'magic-link/magic-link-home.php' );
 
         /**
          * @todo Decide if you want to add a custom admin page in the admin area
@@ -156,35 +115,6 @@ class Disciple_Tools_Plugin_Starter_Template {
          */
         $this->i18n();
 
-        /**
-         * @todo Decide if you want to customize links for your plugin in the plugin admin area
-         * To remove: delete the lines below and remove the function named "plugin_description_links"
-         */
-        if ( is_admin() ) { // adds links to the plugin description area in the plugin admin list.
-            add_filter( 'plugin_row_meta', [ $this, 'plugin_description_links' ], 10, 4 );
-        }
-
-        /**
-         * @todo Decide if you want to create default workflows
-         * To remove: delete the line below and remove the folder named /workflows
-         */
-        require_once( 'workflows/workflows.php' );
-
-    }
-
-    /**
-     * Filters the array of row meta for each/specific plugin in the Plugins list table.
-     * Appends additional links below each/specific plugin on the plugins page.
-     */
-    public function plugin_description_links( $links_array, $plugin_file_name, $plugin_data, $status ) {
-        if ( strpos( $plugin_file_name, basename( __FILE__ ) ) ) {
-            // You can still use `array_unshift()` to add links at the beginning.
-
-            $links_array[] = '<a href="https://disciple.tools">Disciple.Tools Community</a>'; // @todo replace with your links.
-            // @todo add other links here
-        }
-
-        return $links_array;
     }
 
     /**
@@ -207,7 +137,7 @@ class Disciple_Tools_Plugin_Starter_Template {
      */
     public static function deactivation() {
         // add functions here that need to happen on deactivation
-        delete_option( 'dismissed-disciple-tools-plugin-starter-template' );
+        delete_option( 'dismissed-disciple-tools-team-module' );
     }
 
     /**
@@ -218,7 +148,7 @@ class Disciple_Tools_Plugin_Starter_Template {
      * @return void
      */
     public function i18n() {
-        $domain = 'disciple-tools-plugin-starter-template';
+        $domain = 'disciple-tools-team-module';
         load_plugin_textdomain( $domain, false, trailingslashit( dirname( plugin_basename( __FILE__ ) ) ). 'languages' );
     }
 
@@ -230,7 +160,7 @@ class Disciple_Tools_Plugin_Starter_Template {
      * @return string
      */
     public function __toString() {
-        return 'disciple-tools-plugin-starter-template';
+        return 'disciple-tools-team-module';
     }
 
     /**
@@ -265,7 +195,7 @@ class Disciple_Tools_Plugin_Starter_Template {
      * @access public
      */
     public function __call( $method = '', $args = array() ) {
-        _doing_it_wrong( 'disciple_tools_plugin_starter_template::' . esc_html( $method ), 'Method does not exist.', '0.1' );
+        _doing_it_wrong( 'disciple_tools_team_module::' . esc_html( $method ), 'Method does not exist.', '0.1' );
         unset( $method, $args );
         return null;
     }
@@ -273,32 +203,32 @@ class Disciple_Tools_Plugin_Starter_Template {
 
 
 // Register activation hook.
-register_activation_hook( __FILE__, [ 'Disciple_Tools_Plugin_Starter_Template', 'activation' ] );
-register_deactivation_hook( __FILE__, [ 'Disciple_Tools_Plugin_Starter_Template', 'deactivation' ] );
+register_activation_hook( __FILE__, [ 'Disciple_Tools_Team_Module', 'activation' ] );
+register_deactivation_hook( __FILE__, [ 'Disciple_Tools_Team_Module', 'deactivation' ] );
 
 
-if ( ! function_exists( 'disciple_tools_plugin_starter_template_hook_admin_notice' ) ) {
-    function disciple_tools_plugin_starter_template_hook_admin_notice() {
-        global $disciple_tools_plugin_starter_template_required_dt_theme_version;
+if ( ! function_exists( 'disciple_tools_team_module_hook_admin_notice' ) ) {
+    function disciple_tools_team_module_hook_admin_notice() {
+        global $disciple_tools_team_module_required_dt_theme_version;
         $wp_theme = wp_get_theme();
         $current_version = $wp_theme->version;
-        $message = "'Disciple.Tools - Plugin Starter Template' plugin requires 'Disciple.Tools' theme to work. Please activate 'Disciple.Tools' theme or make sure it is latest version.";
+        $message = "'Disciple.Tools - Team Module' plugin requires 'Disciple.Tools' theme to work. Please activate 'Disciple.Tools' theme or make sure it is latest version.";
         if ( $wp_theme->get_template() === 'disciple-tools-theme' ){
-            $message .= ' ' . sprintf( esc_html( 'Current Disciple.Tools version: %1$s, required version: %2$s' ), esc_html( $current_version ), esc_html( $disciple_tools_plugin_starter_template_required_dt_theme_version ) );
+            $message .= ' ' . sprintf( esc_html( 'Current Disciple.Tools version: %1$s, required version: %2$s' ), esc_html( $current_version ), esc_html( $disciple_tools_team_module_required_dt_theme_version ) );
         }
         // Check if it's been dismissed...
-        if ( ! get_option( 'dismissed-disciple-tools-plugin-starter-template', false ) ) { ?>
-            <div class="notice notice-error notice-disciple-tools-plugin-starter-template is-dismissible" data-notice="disciple-tools-plugin-starter-template">
+        if ( ! get_option( 'dismissed-disciple-tools-team-module', false ) ) { ?>
+            <div class="notice notice-error notice-disciple-tools-team-module is-dismissible" data-notice="disciple-tools-team-module">
                 <p><?php echo esc_html( $message );?></p>
             </div>
             <script>
                 jQuery(function($) {
-                    $( document ).on( 'click', '.notice-disciple-tools-plugin-starter-template .notice-dismiss', function () {
+                    $( document ).on( 'click', '.notice-disciple-tools-team-module .notice-dismiss', function () {
                         $.ajax( ajaxurl, {
                             type: 'POST',
                             data: {
                                 action: 'dismissed_notice_handler',
-                                type: 'disciple-tools-plugin-starter-template',
+                                type: 'disciple-tools-team-module',
                                 security: '<?php echo esc_html( wp_create_nonce( 'wp_rest_dismiss' ) ) ?>'
                             }
                         })
