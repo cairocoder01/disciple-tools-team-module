@@ -55,6 +55,8 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
         //list
         add_filter( 'dt_user_list_filters', [ $this, 'dt_user_list_filters' ], 10, 2 );
         add_filter( 'dt_filter_access_permissions', [ $this, 'dt_filter_access_permissions' ], 20, 2 );
+        add_filter( 'dt_can_view_permission', [ $this, 'can_view_permission_filter' ], 10, 3 );
+        add_filter( 'dt_can_update_permission', [ $this, 'dt_can_update_permission' ], 20, 3 );
 
     }
 
@@ -87,14 +89,20 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
      * @link https://github.com/DiscipleTools/Documentation/blob/master/Theme-Core/roles-permissions.md#rolesd
      */
     public function dt_set_roles_and_permissions( $expected_roles ){
+        $multiplier_permissions = Disciple_Tools_Roles::default_multiplier_caps(); // get the base multiplier permissions
 
         if ( !isset( $expected_roles['team_member'] ) ){
             $expected_roles['team_member'] = [
 
                 'label' => __( 'Team Member', 'disciple-tools-team-module' ),
                 'description' => 'Interacts with Contacts, Groups, etc., for a given team',
-                'permissions' => ['access_specific_teams']
+                'permissions' => wp_parse_args( [
+                    'access_specific_teams' => true,
+                    'assign_any_contacts' => true, //assign contacts to others,
+                    'access_trainings' => true,
+                ], $multiplier_permissions ),
             ];
+            // todo: get all post types and give access_ permission
         }
 
         // if the user can access contact they also can access this post type
@@ -308,6 +316,21 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
         return $results;
     }
 
+    private static function get_user_teams() {
+        // get contact connected with current user
+        $contact_id = get_user_option( 'corresponds_to_contact', get_current_user_id() ) ?: [];
+
+        // get all teams this user is a member of
+        $connections = p2p_get_connections( 'teams_to_contacts', [
+            'from' => $contact_id,
+        ]);
+
+        $team_ids = array_map( function ( $connection ) {
+            return $connection->p2p_to;
+        }, $connections );
+
+        return $team_ids;
+    }
     //build list page filters
     public static function dt_user_list_filters( $filters, $post_type ){
         /**
@@ -471,8 +494,66 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
             if ( DT_Posts::can_view_all( $post_type ) ){
                 $permissions = [];
             }
+
+            // if has permission access_specific_teams and user.teams matches
+        } else {
+            if ( current_user_can( 'access_specific_teams' ) ) {
+                //give user permission to all posts their team(s) are assigned to
+                $team_ids = self::get_user_teams();
+
+                $permissions[] = [ 'teams' => $team_ids ];
+            }
         }
         return $permissions;
+    }
+
+    /**
+     * Check if current user is in teams that can access given post
+     * @param $has_permission
+     * @param $post_id
+     * @return bool
+     */
+    public static function can_view_update_post($has_permission, $post_id ) {
+        $contact_id = get_user_option( 'corresponds_to_contact', get_current_user_id() ) ?: [];
+
+        // Get all posts that the user's teams are assigned to
+        global $wpdb;
+        $accessible_post_ids = $wpdb->get_results($wpdb->prepare("
+                SELECT user_team.p2p_from, team_posts.p2p_to
+                FROM $wpdb->p2p as user_team
+                JOIN $wpdb->p2p as team_posts on user_team.p2p_to=team_posts.p2p_from
+                WHERE user_team.p2p_from = %d
+            ", $contact_id));
+
+        // Check if current post_id is in user's list of accessible posts
+        foreach ( $accessible_post_ids as $p2p ) {
+            if ( $p2p->p2p_to == $post_id ) {
+                $has_permission = true;
+                break;
+            }
+        }
+
+        return $has_permission;
+    }
+
+    // access permission
+    public static function can_view_permission_filter( $has_permission, $post_id, $post_type ){
+        if ( $post_type !== self::post_type() ) {
+            if ( current_user_can( 'access_specific_teams' ) ) {
+                //give user permission to all posts their team(s) are assigned to
+                $has_permission = self::can_view_update_post( $has_permission, $post_id );
+            }
+        }
+        return $has_permission;
+    }
+    public static function dt_can_update_permission( $has_permission, $post_id, $post_type ){
+        if ( $post_type !== self::post_type() ) {
+            if (current_user_can('access_specific_teams')) {
+                //give user permission to all posts their team(s) are assigned to
+                $has_permission = self::can_view_update_post($has_permission, $post_id);
+            }
+        }
+        return $has_permission;
     }
 
     // scripts
