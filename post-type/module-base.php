@@ -44,6 +44,8 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
         add_action( 'wp_enqueue_scripts', [ $this, 'scripts' ], 99 );
         add_filter( 'dt_get_post_type_settings', [ $this, 'dt_get_post_type_settings' ], 20, 2 );
 
+        add_filter( 'dt_post_create_fields', [ $this, 'dt_post_create_fields' ], 50, 2 );
+
         //list
         add_filter( 'dt_user_list_filters', [ $this, 'dt_user_list_filters' ], 10, 2 );
         add_filter( 'dt_filter_access_permissions', [ $this, 'dt_filter_access_permissions' ], 20, 2 );
@@ -185,6 +187,14 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
             $tiles['other'] = [ 'label' => __( 'Other', 'disciple-tools-team-module' ) ];
         }
         return $tiles;
+    }
+
+    public function dt_post_create_fields( $fields, $post_type ){
+        if ( $post_type === 'contacts' && isset( $fields['assigned_to'] ) ) {
+            // disable auto-assignment done by the access module
+            unset( $fields['assigned_to'] );
+        }
+        return $fields;
     }
 
     private static function get_user_teams() {
