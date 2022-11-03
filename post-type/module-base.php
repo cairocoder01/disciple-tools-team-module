@@ -248,8 +248,8 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
     //build list page filters
     public static function dt_user_list_filters( $filters, $post_type ){
         // Add filter to all post types besides teams, in order to filter by team
-        if ($post_type !== self::post_type()) {
-            dt_write_log( "add teams filter to $post_type");
+        if ( $post_type !== self::post_type() ) {
+            dt_write_log( "add teams filter to $post_type" );
             $tab = $post_type === 'contacts' ? 'default' : 'all';
             $user_team_ids = self::get_user_teams();
 
@@ -268,7 +268,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
             $filters['filters'][] = [
                 'ID' => 'my_team',
                 'tab' => $tab,
-                'name' => __('Team', 'disciple-tools-team-module'),
+                'name' => __( 'Team', 'disciple-tools-team-module' ),
                 'query' => [
                     'teams' => $user_team_ids,
                     'sort' => 'status'
@@ -278,9 +278,9 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
 
             $can_view_single = current_user_can( 'access_specific_teams' ) && count( $user_team_ids ) === 1;
             $can_view_any = current_user_can( 'view_any_' . $post_type ) || current_user_can( 'dt_all_access_' . $post_type );
-            if (!$can_view_single) {
+            if ( !$can_view_single ) {
 
-                foreach ($team_counts as $team_id => $team_count) {
+                foreach ( $team_counts as $team_id => $team_count ) {
                     $can_view_team = $can_view_any || array_search( $team_id, $user_team_ids ) > -1;
 
                     if ( $can_view_team ) {
@@ -327,7 +327,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
      * @param $post_id
      * @return bool
      */
-    public static function can_view_update_post($has_permission, $post_id ) {
+    public static function can_view_update_post( $has_permission, $post_id ) {
         $contact_id = get_user_option( 'corresponds_to_contact', get_current_user_id() ) ?: [];
 
         // Get all posts that the user's teams are assigned to
@@ -362,9 +362,9 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
     }
     public static function dt_can_update_permission( $has_permission, $post_id, $post_type ){
         if ( $post_type !== self::post_type() ) {
-            if (current_user_can('access_specific_teams')) {
+            if ( current_user_can( 'access_specific_teams' ) ) {
                 //give user permission to all posts their team(s) are assigned to
-                $has_permission = self::can_view_update_post($has_permission, $post_id);
+                $has_permission = self::can_view_update_post( $has_permission, $post_id );
             }
         }
         return $has_permission;
