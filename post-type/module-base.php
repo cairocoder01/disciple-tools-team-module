@@ -124,26 +124,16 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
     }
 
     /**
-     * @todo define fields
+     * Add custom fields
      * Documentation
      * @link https://github.com/DiscipleTools/Documentation/blob/master/Theme-Core/fields.md
      */
     public function dt_custom_fields_settings( $fields, $post_type ){
-        if ( $post_type === $this->post_type ){
-            $fields['assigned_to'] = [
-                'name'        => __( 'Assigned To', 'disciple-tools-team-module' ),
-                'description' => __( 'Select the main person who is responsible for reporting on this record.', 'disciple-tools-team-module' ),
-                'type'        => 'user_select',
-                'default'     => '',
-                'tile' => 'status',
-                'icon' => get_template_directory_uri() . '/dt-assets/images/assigned-to.svg',
-                'show_in_table' => 16,
-            ];
-
-            // can this filter to just user contacts?
+        if ( $post_type === $this->post_type ) {
+            // can this filter to just user contacts? (doesn't seem like it)
             $fields['members'] = [
                 'name' => __( 'Members', 'disciple-tools-team-module' ),
-                'description' => '',
+                'description' => __( 'Which contacts are members of this team.', 'disciple-tools-team-module' ),
                 'type' => 'connection',
                 'post_type' => 'contacts',
                 'p2p_direction' => 'to',
@@ -153,13 +143,24 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                 'create-icon' => get_template_directory_uri() . '/dt-assets/images/add-contact.svg',
                 'show_in_table' => 35
             ];
+        } else {
+            // add a teams field to all post types
+            $fields['teams'] = [
+                'name' => __( 'Teams', 'disciple-tools-team-module' ),
+                'description' => __( 'Which teams interact with and have access to this.', 'disciple-tools-team-module' ),
+                'type' => 'connection',
+                'post_type' => $this->post_type,
+                'p2p_direction' => 'to',
+                'p2p_key' => $post_type.'_to_'.$this->post_type,
+                'tile' => 'status',
+                'icon' => get_template_directory_uri() . '/dt-assets/images/arrow-collapse-all.svg',
+                'show_in_table' => 17
+            ];
         }
 
-        /**
-         * @todo this adds connection to contacts. remove if not needed.
-         */
+        // Connection to mark a contact/user as a member of a team
         if ( $post_type === 'contacts' ){
-            $fields[$this->post_type] = [
+            $fields['member_' .$this->post_type] = [
                 'name' => __( 'Member of Teams', 'disciple-tools-team-module' ),
                 'description' => '',
                 'type' => 'connection',
@@ -167,13 +168,12 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                 'p2p_direction' => 'from',
                 'p2p_key' => $this->post_type.'_to_contacts',
                 'tile' => 'other',
-                'icon' => get_template_directory_uri() . '/dt-assets/images/group-type.svg',
+                'icon' => get_template_directory_uri() . '/dt-assets/images/arrow-collapse-all.svg',
                 'create-icon' => get_template_directory_uri() . '/dt-assets/images/add-group.svg',
                 'show_in_table' => 35
             ];
         }
 
-        // todo: add assigned_teams field to all post types
         return $fields;
     }
 
