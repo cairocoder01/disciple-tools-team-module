@@ -44,14 +44,6 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
         add_action( 'wp_enqueue_scripts', [ $this, 'scripts' ], 99 );
         add_filter( 'dt_get_post_type_settings', [ $this, 'dt_get_post_type_settings' ], 20, 2 );
 
-        // hooks
-        add_action( 'post_connection_removed', [ $this, 'post_connection_removed' ], 10, 4 );
-        add_action( 'post_connection_added', [ $this, 'post_connection_added' ], 10, 4 );
-        add_filter( 'dt_post_update_fields', [ $this, 'dt_post_update_fields' ], 10, 3 );
-        add_filter( 'dt_post_create_fields', [ $this, 'dt_post_create_fields' ], 10, 2 );
-        add_action( 'dt_post_created', [ $this, 'dt_post_created' ], 10, 3 );
-        add_action( 'dt_comment_created', [ $this, 'dt_comment_created' ], 10, 4 );
-
         //list
         add_filter( 'dt_user_list_filters', [ $this, 'dt_user_list_filters' ], 10, 2 );
         add_filter( 'dt_filter_access_permissions', [ $this, 'dt_filter_access_permissions' ], 20, 2 );
@@ -147,8 +139,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                 'p2p_direction' => 'to',
                 'p2p_key' => $this->post_type.'_to_contacts',
                 'tile' => 'members',
-                'icon' => get_template_directory_uri() . '/dt-assets/images/group-type.svg',
-                'create-icon' => get_template_directory_uri() . '/dt-assets/images/add-contact.svg',
+                'icon' => plugin_dir_url( __FILE__ ) . '../assets/team.svg',
                 'show_in_table' => 35
             ];
         } else {
@@ -161,7 +152,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                 'p2p_direction' => 'to',
                 'p2p_key' => $post_type.'_to_'.$this->post_type,
                 'tile' => 'status',
-                'icon' => get_template_directory_uri() . '/dt-assets/images/arrow-collapse-all.svg',
+                'icon' => plugin_dir_url( __FILE__ ) . '../assets/team.svg',
                 'show_in_table' => 17
             ];
         }
@@ -176,8 +167,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                 'p2p_direction' => 'from',
                 'p2p_key' => $this->post_type.'_to_contacts',
                 'tile' => 'other',
-                'icon' => get_template_directory_uri() . '/dt-assets/images/arrow-collapse-all.svg',
-                'create-icon' => get_template_directory_uri() . '/dt-assets/images/add-group.svg',
+                'icon' => plugin_dir_url( __FILE__ ) . '../assets/team.svg',
                 'show_in_table' => 35
             ];
         }
@@ -186,7 +176,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
     }
 
     /**
-     * @todo define tiles
+     * Define tiles
      * @link https://github.com/DiscipleTools/Documentation/blob/master/Theme-Core/field-and-tiles.md
      */
     public function dt_details_additional_tiles( $tiles, $post_type = '' ){
@@ -195,125 +185,6 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
             $tiles['other'] = [ 'label' => __( 'Other', 'disciple-tools-team-module' ) ];
         }
         return $tiles;
-    }
-
-    /**
-     * action when a post connection is added during create or update
-     * @todo catch field changes and do additional processing
-     *
-     * The next three functions are added, removed, and updated of the same field concept
-     */
-    public function post_connection_added( $post_type, $post_id, $field_key, $value ){
-//        if ( $post_type === $this->post_type ){
-//            if ( $field_key === "members" ){
-//                // @todo change 'members'
-//                // execute your code here, if field key match
-//            }
-//            if ( $field_key === "coaches" ){
-//                // @todo change 'coaches'
-//                // execute your code here, if field key match
-//            }
-//        }
-//        if ( $post_type === "contacts" && $field_key === $this->post_type ){
-//            // execute your code here, if a change is made in contacts and a field key is matched
-//        }
-    }
-
-    //action when a post connection is removed during create or update
-    public function post_connection_removed( $post_type, $post_id, $field_key, $value ){
-//        if ( $post_type === $this->post_type ){
-//            // execute your code here, if connection removed
-//        }
-    }
-
-    //filter at the start of post update
-    public function dt_post_update_fields( $fields, $post_type, $post_id ){
-//        if ( $post_type === $this->post_type ){
-//            // execute your code here
-//        }
-        return $fields;
-    }
-
-
-    //filter when a comment is created
-    public function dt_comment_created( $post_type, $post_id, $comment_id, $type ){
-    }
-
-    // filter at the start of post creation
-    public function dt_post_create_fields( $fields, $post_type ){
-        if ( $post_type === $this->post_type ){
-            $post_fields = DT_Posts::get_post_field_settings( $post_type );
-            if ( isset( $post_fields['status'] ) && !isset( $fields['status'] ) ){
-                $fields['status'] = 'active';
-            }
-        }
-        return $fields;
-    }
-
-    //action when a post has been created
-    public function dt_post_created( $post_type, $post_id, $initial_fields ){
-    }
-
-    //list page filters function
-
-    /**
-     * @todo adjust queries to support list counts
-     * Documentation
-     * @link https://github.com/DiscipleTools/Documentation/blob/master/Theme-Core/list-query.md
-     */
-    private static function get_my_status(){
-        /**
-         * @todo adjust query to return count for update needed
-         */
-        global $wpdb;
-        $post_type = self::post_type();
-        $current_user = get_current_user_id();
-
-        $results = $wpdb->get_results( $wpdb->prepare( "
-            SELECT status.meta_value as status, count(pm.post_id) as count, count(un.post_id) as update_needed
-            FROM $wpdb->postmeta pm
-            INNER JOIN $wpdb->posts a ON( a.ID = pm.post_id AND a.post_type = %s and a.post_status = 'publish' )
-            INNER JOIN $wpdb->postmeta status ON ( status.post_id = pm.post_id AND status.meta_key = 'status' )
-            INNER JOIN $wpdb->postmeta as assigned_to ON a.ID=assigned_to.post_id
-              AND assigned_to.meta_key = 'assigned_to'
-              AND assigned_to.meta_value = CONCAT( 'user-', %s )
-            LEFT JOIN $wpdb->postmeta un ON ( un.post_id = pm.post_id AND un.meta_key = 'requires_update' AND un.meta_value = '1' )
-            GROUP BY status.meta_value, pm.meta_value
-        ", $post_type, $current_user ), ARRAY_A);
-
-        return $results;
-    }
-
-    //list page filters function
-    private static function get_all_status_types(){
-        /**
-         * @todo adjust query to return count for update needed
-         */
-        global $wpdb;
-        if ( current_user_can( 'view_any_'.self::post_type() ) ){
-            $results = $wpdb->get_results($wpdb->prepare( "
-                SELECT status.meta_value as status, count(status.post_id) as count, count(un.post_id) as update_needed
-                FROM $wpdb->postmeta status
-                INNER JOIN $wpdb->posts a ON( a.ID = status.post_id AND a.post_type = %s and a.post_status = 'publish' )
-                LEFT JOIN $wpdb->postmeta un ON ( un.post_id = status.post_id AND un.meta_key = 'requires_update' AND un.meta_value = '1' )
-                WHERE status.meta_key = 'status'
-                GROUP BY status.meta_value
-            ", self::post_type() ), ARRAY_A );
-        } else {
-            $results = $wpdb->get_results($wpdb->prepare("
-                SELECT status.meta_value as status, count(pm.post_id) as count, count(un.post_id) as update_needed
-                FROM $wpdb->postmeta pm
-                INNER JOIN $wpdb->postmeta status ON( status.post_id = pm.post_id AND status.meta_key = 'status' )
-                INNER JOIN $wpdb->posts a ON( a.ID = pm.post_id AND a.post_type = %s and a.post_status = 'publish' )
-                LEFT JOIN $wpdb->dt_share AS shares ON ( shares.post_id = a.ID AND shares.user_id = %s )
-                LEFT JOIN $wpdb->postmeta assigned_to ON ( assigned_to.post_id = pm.post_id AND assigned_to.meta_key = 'assigned_to' && assigned_to.meta_value = %s )
-                LEFT JOIN $wpdb->postmeta un ON ( un.post_id = pm.post_id AND un.meta_key = 'requires_update' AND un.meta_value = '1' )
-                WHERE ( shares.user_id IS NOT NULL OR assigned_to.meta_value IS NOT NULL )
-                GROUP BY status.meta_value, pm.meta_value
-            ", self::post_type(), get_current_user_id(), 'user-' . get_current_user_id() ), ARRAY_A);
-        }
-
-        return $results;
     }
 
     private static function get_user_teams() {
@@ -331,156 +202,99 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
 
         return $team_ids;
     }
+
+    //list page filters function
+
+    /**
+     * @todo adjust queries to support list counts
+     * Documentation
+     * @link https://github.com/DiscipleTools/Documentation/blob/master/Theme-Core/list-query.md
+     */
+    private static function get_my_teams_count( $post_type ){
+        /**
+         * @todo adjust query to return count for update needed
+         */
+        global $wpdb;
+        $current_user = get_current_user_id();
+        $results = $wpdb->get_var($wpdb->prepare( "
+            SELECT count(p2p.p2p_to)
+            FROM $wpdb->p2p p2p
+            JOIN $wpdb->posts p ON (p.ID = p2p.p2p_to AND p.post_type = %s AND p.post_status = 'publish')
+            JOIN $wpdb->p2p p2p2 ON (p2p.p2p_from = p2p2.p2p_to)
+            JOIN $wpdb->postmeta pm ON (pm.post_id=p2p2.p2p_from AND meta_key='corresponds_to_user')
+            WHERE p2p.p2p_type = CONCAT(%s, '_to_teams')
+            AND pm.meta_value = %d
+        ", $post_type, $post_type, $current_user ) );
+
+        return $results;
+    }
+
+    //list page filters function
+    private static function get_all_team_counts( $post_type ) {
+        global $wpdb;
+        $results = $wpdb->get_results($wpdb->prepare( "
+            SELECT p2p.p2p_from as team_id, team.post_title, count(p2p.p2p_to) as count
+            FROM $wpdb->p2p p2p
+            JOIN $wpdb->posts p ON (p.ID = p2p.p2p_to AND p.post_type = %s AND p.post_status = 'publish')
+            JOIN $wpdb->posts team ON (team.ID = p2p.p2p_from)
+            WHERE p2p.p2p_type = CONCAT(%s, '_to_teams')
+            GROUP BY p2p.p2p_from, team.post_title #team
+        ", $post_type, $post_type ), ARRAY_A );
+
+        return $results;
+    }
+
+
     //build list page filters
     public static function dt_user_list_filters( $filters, $post_type ){
-        /**
-         * @todo process and build filter lists
-         */
-        if ( $post_type === self::post_type() ){
-            $counts = self::get_my_status();
-            $fields = DT_Posts::get_post_field_settings( $post_type );
-            /**
-             * Setup my filters
-             */
-            $active_counts = [];
-            $update_needed = 0;
-            $status_counts = [];
-            $total_my = 0;
+        // Add filter to all post types besides teams, in order to filter by team
+        if ($post_type !== self::post_type()) {
+            dt_write_log( "add teams filter to $post_type");
+            $tab = $post_type === 'contacts' ? 'default' : 'all';
+            $user_team_ids = self::get_user_teams();
+
+            $total_my = self::get_my_teams_count( $post_type );
+            $counts = self::get_all_team_counts( $post_type );
+
+            $team_counts = [];
             foreach ( $counts as $count ){
-                $total_my += $count['count'];
-                dt_increment( $status_counts[$count['status']], $count['count'] );
-                if ( $count['status'] === 'active' ){
-                    if ( isset( $count['update_needed'] ) ) {
-                        $update_needed += (int) $count['update_needed'];
-                    }
-                    dt_increment( $active_counts[$count['status']], $count['count'] );
-                }
+                $team_counts[$count['team_id']] = [
+                    'name' => $count['post_title'],
+                    'count' => $count['count']
+                ];
             }
 
-            $filters['tabs'][] = [
-                'key' => 'assigned_to_me',
-                'label' => __( 'Assigned to me', 'disciple-tools-team-module' ),
-                'count' => $total_my,
-                'order' => 20
-            ];
-            // add assigned to me filters
+            // add assigned to team filters
             $filters['filters'][] = [
-                'ID' => 'my_all',
-                'tab' => 'assigned_to_me',
-                'name' => __( 'All', 'disciple-tools-team-module' ),
+                'ID' => 'my_team',
+                'tab' => $tab,
+                'name' => __('Team', 'disciple-tools-team-module'),
                 'query' => [
-                    'assigned_to' => [ 'me' ],
+                    'teams' => $user_team_ids,
                     'sort' => 'status'
                 ],
-                'count' => $total_my,
+                'count' => $total_my ?: null,
             ];
-            foreach ( $fields['status']['default'] as $status_key => $status_value ) {
-                if ( isset( $status_counts[$status_key] ) ){
-                    $filters['filters'][] = [
-                        'ID' => 'my_' . $status_key,
-                        'tab' => 'assigned_to_me',
-                        'name' => $status_value['label'],
-                        'query' => [
-                            'assigned_to' => [ 'me' ],
-                            'status' => [ $status_key ],
-                            'sort' => '-post_date'
-                        ],
-                        'count' => $status_counts[$status_key]
-                    ];
-                    if ( $status_key === 'active' ){
-                        if ( $update_needed > 0 ){
-                            $filters['filters'][] = [
-                                'ID' => 'my_update_needed',
-                                'tab' => 'assigned_to_me',
-                                'name' => $fields['requires_update']['name'],
-                                'query' => [
-                                    'assigned_to' => [ 'me' ],
-                                    'status' => [ 'active' ],
-                                    'requires_update' => [ true ],
-                                ],
-                                'count' => $update_needed,
-                                'subfilter' => true
-                            ];
-                        }
-                    }
-                }
-            }
 
-            if ( current_user_can( 'view_any_' . self::post_type() ) ){
-                $counts = self::get_all_status_types();
-                $active_counts = [];
-                $update_needed = 0;
-                $status_counts = [];
-                $total_all = 0;
-                foreach ( $counts as $count ){
-                    $total_all += $count['count'];
-                    dt_increment( $status_counts[$count['status']], $count['count'] );
-                    if ( $count['status'] === 'active' ){
-                        if ( isset( $count['update_needed'] ) ) {
-                            $update_needed += (int) $count['update_needed'];
-                        }
-                        dt_increment( $active_counts[$count['status']], $count['count'] );
-                    }
-                }
-                $filters['tabs'][] = [
-                    'key' => 'all',
-                    'label' => __( 'All', 'disciple-tools-team-module' ),
-                    'count' => $total_all,
-                    'order' => 10
-                ];
-                // add assigned to me filters
-                $filters['filters'][] = [
-                    'ID' => 'all',
-                    'tab' => 'all',
-                    'name' => __( 'All', 'disciple-tools-team-module' ),
-                    'query' => [
-                        'sort' => '-post_date'
-                    ],
-                    'count' => $total_all
-                ];
+            $can_view_single = current_user_can( 'access_specific_teams' ) && count( $user_team_ids ) === 1;
+            $can_view_any = current_user_can( 'view_any_' . $post_type ) || current_user_can( 'dt_all_access_' . $post_type );
+            if (!$can_view_single) {
 
-                foreach ( $fields['status']['default'] as $status_key => $status_value ) {
-                    if ( isset( $status_counts[$status_key] ) ){
+                foreach ($team_counts as $team_id => $team_count) {
+                    $can_view_team = $can_view_any || array_search( $team_id, $user_team_ids ) > -1;
+
+                    if ( $can_view_team ) {
                         $filters['filters'][] = [
-                            'ID' => 'all_' . $status_key,
-                            'tab' => 'all',
-                            'name' => $status_value['label'],
+                            'ID' => 'team_' . $team_id,
+                            'tab' => $tab,
+                            'name' => $team_count['name'],
                             'query' => [
-                                'status' => [ $status_key ],
-                                'sort' => '-post_date'
+                                'teams' => [ $team_id ],
+                                'sort' => 'status'
                             ],
-                            'count' => $status_counts[$status_key]
+                            'count' => $team_count['count'],
+                            'subfilter' => true
                         ];
-                        if ( $status_key === 'active' ){
-                            if ( $update_needed > 0 ){
-                                $filters['filters'][] = [
-                                    'ID' => 'all_update_needed',
-                                    'tab' => 'all',
-                                    'name' => $fields['requires_update']['name'],
-                                    'query' => [
-                                        'status' => [ 'active' ],
-                                        'requires_update' => [ true ],
-                                    ],
-                                    'count' => $update_needed,
-                                    'subfilter' => true
-                                ];
-                            }
-//                        foreach ( $fields["type"]["default"] as $type_key => $type_value ) {
-//                            if ( isset( $active_counts[$type_key] ) ) {
-//                                $filters["filters"][] = [
-//                                    "ID" => 'all_' . $type_key,
-//                                    "tab" => 'all',
-//                                    "name" => $type_value["label"],
-//                                    "query" => [
-//                                        'status' => [ 'active' ],
-//                                        'sort' => 'name'
-//                                    ],
-//                                    "count" => $active_counts[$type_key],
-//                                    'subfilter' => true
-//                                ];
-//                            }
-//                        }
-                        }
                     }
                 }
             }
