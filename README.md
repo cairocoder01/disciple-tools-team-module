@@ -14,6 +14,8 @@ A team collaborator role allows a user to see all of the contacts, groups, and o
 
 If you use Disciple Tools in this kind of team-based workflow, give the team module a try and see how it can increase your collaborative efforts. It can be used both with and without the Access Module enabled.
 
+[![Video Overview](http://img.youtube.com/vi/7Ww_tTDrtio/0.jpg)](http://www.youtube.com/watch?v=7Ww_tTDrtio)
+https://youtu.be/7Ww_tTDrtio
 ## Usage
 
 #### Will Do
