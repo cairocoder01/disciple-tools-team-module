@@ -2,3 +2,8 @@ vendor/*
 composer.lock
 .idea
 .phpunit.result.cache
+.DS_Store
+
+documentation/video-overview/audio.txt
+documentation/video-overview/*.mp3
+documentation/video-overview/*.mp4

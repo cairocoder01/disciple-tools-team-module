@@ -1,0 +1,17 @@
+file 'video-title.png'
+duration 12
+file '../screenshots/teams-list.png'
+duration 6
+file '../screenshots/new-team.png'
+duration 2
+file '../screenshots/team-detail.png'
+duration 4
+file '../screenshots/contact-assign-team.png'
+duration 10
+file '../screenshots/team-member-contact-list.png'
+duration 14
+file '../screenshots/team-collaborator-contact-list.png'
+duration 22
+file 'video-title.png'
+duration 12
+file 'video-title.png'

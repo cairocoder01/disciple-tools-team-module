@@ -1,32 +1,30 @@
-## readme format:
-
-![Plugin Banner](https://raw.githubusercontent.com/cairocoder01/disciple-tools-team-module/b30402d97895e3f911efcb47fb8f29ccd1eb92e5/documentation/banner.png)
+![Plugin Banner](documentation/banner.png)
 
 # Disciple.Tools - Team Module
 
-Description Description Description Description Description Description Description
-Description Description Description Description Description Description Description
+The team module is a way to access and share contacts and groups in a collaborative team setting, where no individual is responsible for a given contact, but the whole team oversees his or her journey.
 
-## Purpose
+The module adds a new Team post type for you to set up and manage your teams. Just create a new team and assign any users to be members of it.
 
-Purpose purpose purpose purpose purpose purpose purpose purpose purpose purpose purpose
-Purpose purpose purpose purpose purpose purpose purpose purpose purpose purpose purpose
+Now, on any contact, group, or other post type, you see a list of teams that you can assign it to. By assigning a contact to a team, any member of that team now has access to view and edit it.
 
-Purpose purpose purpose purpose purpose purpose purpose purpose purpose purpose purpose
-Purpose purpose purpose purpose purpose purpose purpose purpose purpose purpose purpose
+A team member user role is available to give the needed permissions to your users. A team member will see only the contacts, groups, and other posts that are either assigned to their team or directly shared with them. 
+
+A team collaborator role allows a user to see all of the contacts, groups, and other post types in the system. This allows them to communicate between teams and assign contacts to additional teams when needed. On their list view, they have a quick filter to view just those posts that are assigned to their team or any other team.
+
+If you use Disciple Tools in this kind of team-based workflow, give the team module a try and see how it can increase your collaborative efforts. It can be used both with and without the Access Module enabled.
 
 ## Usage
 
 #### Will Do
 
-- Item
-- Item
-- Item
+- Adds `Team` post type with name and members
+- Adds `Team Member` role to give access to only those posts assigned to user's team
+- Disables Access Module's auto-assignment of new contacts to base user
 
 #### Will Not Do
 
-- Item
-- Item
+
 
 ## Requirements
 
@@ -49,4 +47,8 @@ system for git. For a more details on contribution see the
 
 ## Screenshots
 
-![screenshot](documentation/community/starter-banners/banner-blue-green.png)
+![screenshot](documentation/screenshots/teams-list.png)
+![screenshot](documentation/screenshots/team-detail.png)
+![screenshot](documentation/screenshots/contact-assign-team.png)
+![screenshot](documentation/screenshots/team-member-contact-list.png)
+![screenshot](documentation/screenshots/team-collaborator-contact-list.png)
