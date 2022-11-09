@@ -329,7 +329,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
     public static function dt_user_list_filters( $filters, $post_type ){
         // Add filter to all post types besides teams, in order to filter by team
         if ( $post_type !== self::post_type() ) {
-            dt_write_log( "add teams filter to $post_type" );
+            // dt_write_log( "add teams filter to $post_type" );
             $tab = $post_type === 'contacts' ? 'default' : 'all';
             $user_team_ids = self::get_user_teams();
 
@@ -409,7 +409,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
      */
     public static function can_view_update_post( $has_permission, $post_id ) {
         if ( !$has_permission ) {
-            $contact_id = get_user_option('corresponds_to_contact', get_current_user_id()) ?: [];
+            $contact_id = get_user_option( 'corresponds_to_contact', get_current_user_id() ) ?: [];
 
             // Get all posts that the user's teams are assigned to
             global $wpdb;
@@ -421,8 +421,8 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
             ", $contact_id));
 
             // Check if current post_id is in user's list of accessible posts
-            foreach ($accessible_post_ids as $p2p) {
-                if ($p2p->p2p_to == $post_id) {
+            foreach ( $accessible_post_ids as $p2p ) {
+                if ( $p2p->p2p_to == $post_id ) {
                     $has_permission = true;
                     break;
                 }
@@ -443,16 +443,16 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
         return $has_permission;
     }
     public static function dt_can_update_permission( $has_permission, $post_id, $post_type ){
-        if ($post_type === self::post_type()) {
-            if (current_user_can('update_my_teams')) {
+        if ( $post_type === self::post_type() ) {
+            if ( current_user_can( 'update_my_teams' ) ) {
                 $user_teams = self::get_user_teams();
-                dt_write_log("can_update: " . json_encode($post_id) . " | " . json_encode($user_teams));
+                // dt_write_log( 'can_update: ' . json_encode( $post_id ) . ' | ' . json_encode( $user_teams ) );
                 $has_permission = array_search( $post_id, $user_teams, false ) > -1;
             }
         } else {
-            if (current_user_can('access_specific_teams')) {
+            if ( current_user_can( 'access_specific_teams' ) ) {
                 //give user permission to all posts their team(s) are assigned to
-                $has_permission = self::can_view_update_post($has_permission, $post_id);
+                $has_permission = self::can_view_update_post( $has_permission, $post_id );
             }
         }
         return $has_permission;
