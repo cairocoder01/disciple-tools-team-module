@@ -35,7 +35,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
 
         //setup post type
         add_action( 'after_setup_theme', [ $this, 'after_setup_theme' ], 100 );
-        add_filter( 'dt_set_roles_and_permissions', [ $this, 'dt_set_roles_and_permissions' ], 20, 1 ); //after contacts
+        add_filter( 'dt_set_roles_and_permissions', [ $this, 'dt_set_roles_and_permissions' ], 25, 1 ); //after contacts
 
         //setup tiles and fields
         add_filter( 'dt_custom_fields_settings', [ $this, 'dt_custom_fields_settings' ], 10, 2 );
@@ -94,6 +94,59 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                     'assign_any_contacts' => true, //assign contacts to others,
                     'access_trainings' => true,
                 ], $multiplier_permissions ),
+            ];
+        }
+
+        if ( !isset( $expected_roles['team_collaborator'] ) ) {
+            $expected_roles['team_collaborator'] = [
+                'label' => __( 'Team Collaborator', 'disciple-tools-team-module' ),
+                'description' => 'Access to all Contacts, Groups, etc. for all teams',
+                'permissions' => wp_parse_args( [
+                    // 'dt_all_access_contacts' => true,
+                    'access_contacts' => true,
+                    'view_any_contacts' => true,
+                    'update_any_contacts' => true,
+                    'assign_any_contacts' => true, //assign contacts to others,
+
+                    'access_groups' => true,
+                    'view_any_groups' => true,
+                    'update_any_groups' => true,
+
+                    'access_trainings' => true,
+                    'view_any_trainings' => true,
+                    'update_any_trainings' => true,
+
+                    // 'access_teams' => true,
+                    // 'view_any_teams' => true,
+
+                ], $multiplier_permissions ),
+                'order' => 20
+            ];
+        }
+
+        if ( !isset( $expected_roles['team_leader'] ) ) {
+            $expected_roles['team_leader'] = [
+                'label' => __( 'Team Leader', 'disciple-tools-team-module' ),
+                'description' => 'Access to all Contacts, Groups, etc. for all teams and access to update their team',
+                'permissions' => wp_parse_args( [
+                    'dt_all_access_contacts' => true,
+                    'access_contacts' => true,
+                    'assign_any_contacts' => true, //assign contacts to others,
+
+                    'access_groups' => true,
+                    'view_any_groups' => true,
+                    'update_any_groups' => true,
+
+                    'access_trainings' => true,
+                    'view_any_trainings' => true,
+                    'update_any_trainings' => true,
+
+                    'access_teams' => true,
+                    'view_any_teams' => true,
+                    'update_my_teams' => true,
+
+                ], $multiplier_permissions ),
+                'order' => 20
             ];
         }
 
@@ -338,8 +391,8 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
 
             // if has permission access_specific_teams and user.teams matches
         } else {
+            //give user permission to all posts their team(s) are assigned to
             if ( current_user_can( 'access_specific_teams' ) ) {
-                //give user permission to all posts their team(s) are assigned to
                 $team_ids = self::get_user_teams();
 
                 $permissions[] = [ 'teams' => $team_ids ];
@@ -355,22 +408,24 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
      * @return bool
      */
     public static function can_view_update_post( $has_permission, $post_id ) {
-        $contact_id = get_user_option( 'corresponds_to_contact', get_current_user_id() ) ?: [];
+        if ( !$has_permission ) {
+            $contact_id = get_user_option('corresponds_to_contact', get_current_user_id()) ?: [];
 
-        // Get all posts that the user's teams are assigned to
-        global $wpdb;
-        $accessible_post_ids = $wpdb->get_results($wpdb->prepare("
+            // Get all posts that the user's teams are assigned to
+            global $wpdb;
+            $accessible_post_ids = $wpdb->get_results($wpdb->prepare("
                 SELECT user_team.p2p_from, team_posts.p2p_to
                 FROM $wpdb->p2p as user_team
                 JOIN $wpdb->p2p as team_posts on user_team.p2p_to=team_posts.p2p_from
                 WHERE user_team.p2p_from = %d
             ", $contact_id));
 
-        // Check if current post_id is in user's list of accessible posts
-        foreach ( $accessible_post_ids as $p2p ) {
-            if ( $p2p->p2p_to == $post_id ) {
-                $has_permission = true;
-                break;
+            // Check if current post_id is in user's list of accessible posts
+            foreach ($accessible_post_ids as $p2p) {
+                if ($p2p->p2p_to == $post_id) {
+                    $has_permission = true;
+                    break;
+                }
             }
         }
 
@@ -388,10 +443,16 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
         return $has_permission;
     }
     public static function dt_can_update_permission( $has_permission, $post_id, $post_type ){
-        if ( $post_type !== self::post_type() ) {
-            if ( current_user_can( 'access_specific_teams' ) ) {
+        if ($post_type === self::post_type()) {
+            if (current_user_can('update_my_teams')) {
+                $user_teams = self::get_user_teams();
+                dt_write_log("can_update: " . json_encode($post_id) . " | " . json_encode($user_teams));
+                $has_permission = array_search( $post_id, $user_teams, false ) > -1;
+            }
+        } else {
+            if (current_user_can('access_specific_teams')) {
                 //give user permission to all posts their team(s) are assigned to
-                $has_permission = self::can_view_update_post( $has_permission, $post_id );
+                $has_permission = self::can_view_update_post($has_permission, $post_id);
             }
         }
         return $has_permission;
