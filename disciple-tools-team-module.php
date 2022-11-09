@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Disciple.Tools - Team Module
  * Plugin URI: https://github.com/cairocoder01/disciple-tools-team-module
- * Description: Disciple.Tools - Team Module is intended to help developers and integrator jumpstart their extension of the Disciple.Tools system.
+ * Description: The Team Module adds a way to access and share contacts and groups in a collaborative team setting.
  * Text Domain: disciple-tools-team-module
  * Domain Path: /languages
  * Version:  0.2
