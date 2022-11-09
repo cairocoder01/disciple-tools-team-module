@@ -21,7 +21,6 @@ add_filter( 'dt_post_type_modules', function( $modules ){
     $modules['team'] = [
         'name' => __( 'Team Module', 'disciple-tools-team-module' ),
         'enabled' => true,
-        'locked' => true,
         'prerequisites' => [ 'contacts_base' ],
         'post_type' => 'teams',
         'description' => __( 'Teams functionality', 'disciple-tools-team-module' )

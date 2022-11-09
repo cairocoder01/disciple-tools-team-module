@@ -9,7 +9,6 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
 
     /**
      * Define post type variables
-     * @todo update these variables with your post_type, module key, and names.
      * @var string
      */
     public $post_type = 'teams';
@@ -96,7 +95,25 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                     'access_trainings' => true,
                 ], $multiplier_permissions ),
             ];
-            // todo: get all post types and give access_ permission
+        }
+
+        if ( !isset( $expected_roles['teams_admin'] ) ) {
+            $expected_roles['teams_admin'] = [
+                'label' => __( 'Teams Admin', 'disciple-tools-team-module' ),
+                'description' => 'Admin access to all teams',
+                'permissions' => wp_parse_args( [
+                    'dt_all_access_contacts' => true,
+                    'view_project_metrics' => true,
+                    'list_users' => true,
+                    'dt_list_users' => true,
+                    'assign_any_contacts' => true, //assign contacts to others
+                    'access_teams' => true,
+                    'create_teams' => true,
+                    'view_any_teams' => true,
+                    'update_any_teams' => true,
+                ], $multiplier_permissions ),
+                'order' => 20
+            ];
         }
 
         // if the user can access contact they also can access this post type
