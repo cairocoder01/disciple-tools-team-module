@@ -331,6 +331,28 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
         if ( $post_type !== self::post_type() ) {
             // dt_write_log( "add teams filter to $post_type" );
             $tab = $post_type === 'contacts' ? 'default' : 'all';
+
+            // Add Default filter tab if it doesn't exist yet
+            if ( $post_type !== 'contacts' ) {
+                $has_all_tab = array_search( 'all', array_column( $filters['tabs'], 'key' ) ) > -1;
+                if ( !$has_all_tab ) {
+                    $filters['tabs'][] = [
+                        'key' => 'all',
+                        'label' => __( 'Default Filters', 'disciple_tools' ),
+                        'order' => 10
+                    ];
+                    // add assigned to me filters
+                    $filters['filters'][] = [
+                        'ID' => 'all',
+                        'tab' => 'all',
+                        'name' => _x( 'All', 'All records', 'disciple_tools' ),
+                        'query' => [
+                            'sort' => '-post_date',
+                            'status' => [ '-closed' ]
+                        ],
+                    ];
+                }
+            }
             $user_team_ids = self::get_user_teams();
 
             $total_my = self::get_my_teams_count( $post_type );
