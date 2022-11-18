@@ -5,7 +5,7 @@
  * Description: The Team Module adds a way to access and share contacts and groups in a collaborative team setting.
  * Text Domain: disciple-tools-team-module
  * Domain Path: /languages
- * Version:  0.3
+ * Version:  0.4
  * Author URI: https://github.com/cairocoder01
  * GitHub Plugin URI: https://github.com/cairocoder01/disciple-tools-team-module
  * Requires at least: 4.7.0

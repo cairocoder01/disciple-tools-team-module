@@ -50,6 +50,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
         add_filter( 'dt_filter_access_permissions', [ $this, 'dt_filter_access_permissions' ], 20, 2 );
         add_filter( 'dt_can_view_permission', [ $this, 'can_view_permission_filter' ], 10, 3 );
         add_filter( 'dt_can_update_permission', [ $this, 'dt_can_update_permission' ], 20, 3 );
+        add_filter( 'dt_get_viewable_compact', [ $this, 'dt_filter_get_viewable_compact' ], 20, 4 );
 
     }
 
@@ -93,6 +94,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                     'access_specific_teams' => true,
                     'assign_any_contacts' => true, //assign contacts to others,
                     'access_trainings' => true,
+                    'access_teams' => true,
                 ], $multiplier_permissions ),
             ];
         }
@@ -480,6 +482,29 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
         return $has_permission;
     }
 
+    public static function dt_filter_get_viewable_compact( $result, $post_type, $search_string, $args ) {
+        // Allow all users to see
+        if ( $post_type === 'teams' ) {
+            $result = DT_Posts::list_posts($post_type, [], false);
+            $compact = [];
+            //filter out users if requested.
+            foreach ($result['posts'] as $post) {
+                if (isset($args['include-users']) && $args['include-users'] === 'false' && $post->corresponds_to_user >= 1) {
+                    continue;
+                }
+                $compact[] = [
+                    'ID' => $post['ID'],
+                    'name' => wp_specialchars_decode($post['post_title'])
+                ];
+            }
+            return [
+                'total' => $result['total'],
+                'raw' => $compact,
+                'posts' => DT_Posts::capture_viewable_compact_post_record_status($post_type, array_slice($compact, 0, 50)),
+            ];
+        }
+        return $result;
+    }
     // scripts
     public function scripts(){
         if ( is_singular( $this->post_type ) && get_the_ID() && DT_Posts::can_view( $this->post_type, get_the_ID() ) ){
