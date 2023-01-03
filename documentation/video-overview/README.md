@@ -8,7 +8,7 @@
 5. Click "Speak It" button
 6. Look for a request starting with "proxy" (e.g. https://cxl-services.appspot.com/proxy?url=https://texttospeech.googleapis.com/...)
 7. Open response and copy the `audioContent` property into a text file (e.g. audio.txt).
-8. Open a terminal/console in the directory where the text file is saved and run `base64 audio.txt -d > audio.mp3
+8. Open a terminal/console in the directory where the text file is saved and run `base64 audio.txt -d > audio.mp3 on MacOS use command `base64 --decode -i audio.txt > audio.mp3`
 
 ## Get Screenshots
 See [FFMPEG wiki](https://trac.ffmpeg.org/wiki/Slideshow) for details.
