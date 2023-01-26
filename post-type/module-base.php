@@ -488,22 +488,22 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
     public static function dt_filter_get_viewable_compact( $result, $post_type, $search_string, $args ) {
         // Allow all users to see
         if ( $post_type === 'teams' ) {
-            $result = DT_Posts::list_posts($post_type, [], false);
+            $result = DT_Posts::list_posts( $post_type, [], false );
             $compact = [];
             //filter out users if requested.
-            foreach ($result['posts'] as $post) {
-                if (isset($args['include-users']) && $args['include-users'] === 'false' && $post->corresponds_to_user >= 1) {
+            foreach ( $result['posts'] as $post ) {
+                if ( isset( $args['include-users'] ) && $args['include-users'] === 'false' && $post->corresponds_to_user >= 1 ) {
                     continue;
                 }
                 $compact[] = [
                     'ID' => $post['ID'],
-                    'name' => wp_specialchars_decode($post['post_title'])
+                    'name' => wp_specialchars_decode( $post['post_title'] )
                 ];
             }
             return [
                 'total' => $result['total'],
                 'raw' => $compact,
-                'posts' => DT_Posts::capture_viewable_compact_post_record_status($post_type, array_slice($compact, 0, 50)),
+                'posts' => DT_Posts::capture_viewable_compact_post_record_status( $post_type, array_slice( $compact, 0, 50 ) ),
             ];
         }
         return $result;
