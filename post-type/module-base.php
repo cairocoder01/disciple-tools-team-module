@@ -94,6 +94,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                     'access_specific_teams' => true,
                     'assign_any_contacts' => true, //assign contacts to others,
                     'access_trainings' => true,
+                    'create_trainings' => true,
                     'access_teams' => true,
                 ], $multiplier_permissions ),
             ];
@@ -117,6 +118,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                     'access_trainings' => true,
                     'view_any_trainings' => true,
                     'update_any_trainings' => true,
+                    'create_trainings' => true,
 
                     // 'access_teams' => true,
                     // 'view_any_teams' => true,
@@ -142,6 +144,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                     'access_trainings' => true,
                     'view_any_trainings' => true,
                     'update_any_trainings' => true,
+                    'create_trainings' => true,
 
                     'access_teams' => true,
                     'view_any_teams' => true,
