@@ -91,6 +91,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                 'label' => __( 'Team Member', 'disciple-tools-team-module' ),
                 'description' => 'Interacts with Contacts, Groups, etc., for a given team',
                 'permissions' => wp_parse_args( [
+                    'dt_list_users' => true,
                     'access_specific_teams' => true,
                     'assign_any_contacts' => true, //assign contacts to others,
                     'access_trainings' => true,
@@ -105,6 +106,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                 'label' => __( 'Team Collaborator', 'disciple-tools-team-module' ),
                 'description' => 'Access to all Contacts, Groups, etc. for all teams',
                 'permissions' => wp_parse_args( [
+                    'dt_list_users' => true,
                     // 'dt_all_access_contacts' => true,
                     'access_contacts' => true,
                     'view_any_contacts' => true,
@@ -133,6 +135,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                 'label' => __( 'Team Leader', 'disciple-tools-team-module' ),
                 'description' => 'Access to all Contacts, Groups, etc. for all teams and access to update their team',
                 'permissions' => wp_parse_args( [
+                    'dt_list_users' => true,
                     'dt_all_access_contacts' => true,
                     'access_contacts' => true,
                     'assign_any_contacts' => true, //assign contacts to others,
