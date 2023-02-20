@@ -85,75 +85,54 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
     public function dt_set_roles_and_permissions( $expected_roles ){
         $multiplier_permissions = Disciple_Tools_Roles::default_multiplier_caps(); // get the base multiplier permissions
 
+
+        $base_team_member_permissions = wp_parse_args( [
+            'dt_list_users' => true,
+            'access_specific_teams' => true, //give user permission to all posts their team(s) are assigned to
+            'assign_any_contacts' => true, //assign contacts to others,
+            'access_trainings' => true,
+            'create_trainings' => true,
+            'update_trainings' => true,
+            'access_teams' => true,
+        ], $multiplier_permissions );
+
+
+        $general_team_admin_permissions = wp_parse_args( [
+            'dt_all_access_contacts' => true, //view and update all access contacts
+
+            'view_any_groups' => true,
+            'update_any_groups' => true,
+
+            'view_any_trainings' => true,
+            'update_any_trainings' => true,
+        ], $base_team_member_permissions );
+
         if ( !isset( $expected_roles['team_member'] ) ){
             $expected_roles['team_member'] = [
 
                 'label' => __( 'Team Member', 'disciple-tools-team-module' ),
                 'description' => 'Interacts with Contacts, Groups, etc., for a given team',
-                'permissions' => wp_parse_args( [
-                    'dt_list_users' => true,
-                    'access_specific_teams' => true,
-                    'assign_any_contacts' => true, //assign contacts to others,
-                    'access_trainings' => true,
-                    'create_trainings' => true,
-                    'access_teams' => true,
-                ], $multiplier_permissions ),
+                'permissions' => $base_team_member_permissions,
             ];
         }
 
-        if ( !isset( $expected_roles['team_collaborator'] ) ) {
+        if ( !isset( $expected_roles['team_collaborator'] ) ){
             $expected_roles['team_collaborator'] = [
                 'label' => __( 'Team Collaborator', 'disciple-tools-team-module' ),
                 'description' => 'Access to all Contacts, Groups, etc. for all teams',
-                'permissions' => wp_parse_args( [
-                    'dt_list_users' => true,
-                    // 'dt_all_access_contacts' => true,
-                    'access_contacts' => true,
-                    'view_any_contacts' => true,
-                    'update_any_contacts' => true,
-                    'assign_any_contacts' => true, //assign contacts to others,
-
-                    'access_groups' => true,
-                    'view_any_groups' => true,
-                    'update_any_groups' => true,
-
-                    'access_trainings' => true,
-                    'view_any_trainings' => true,
-                    'update_any_trainings' => true,
-                    'create_trainings' => true,
-
-                    // 'access_teams' => true,
-                    // 'view_any_teams' => true,
-
-                ], $multiplier_permissions ),
+                'permissions' => wp_parse_args( [], $general_team_admin_permissions ),
                 'order' => 20
             ];
         }
 
-        if ( !isset( $expected_roles['team_leader'] ) ) {
+        if( !isset( $expected_roles['team_leader'] ) ) {
             $expected_roles['team_leader'] = [
                 'label' => __( 'Team Leader', 'disciple-tools-team-module' ),
                 'description' => 'Access to all Contacts, Groups, etc. for all teams and access to update their team',
                 'permissions' => wp_parse_args( [
-                    'dt_list_users' => true,
-                    'dt_all_access_contacts' => true,
-                    'access_contacts' => true,
-                    'assign_any_contacts' => true, //assign contacts to others,
-
-                    'access_groups' => true,
-                    'view_any_groups' => true,
-                    'update_any_groups' => true,
-
-                    'access_trainings' => true,
-                    'view_any_trainings' => true,
-                    'update_any_trainings' => true,
-                    'create_trainings' => true,
-
-                    'access_teams' => true,
                     'view_any_teams' => true,
                     'update_my_teams' => true,
-
-                ], $multiplier_permissions ),
+                ], $general_team_admin_permissions ),
                 'order' => 20
             ];
         }
@@ -163,28 +142,17 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                 'label' => __( 'Teams Admin', 'disciple-tools-team-module' ),
                 'description' => 'Admin access to all teams',
                 'permissions' => wp_parse_args( [
-                    'dt_all_access_contacts' => true,
                     'view_project_metrics' => true,
                     'list_users' => true,
-                    'dt_list_users' => true,
-                    'assign_any_contacts' => true, //assign contacts to others
-                    'access_teams' => true,
+
                     'create_teams' => true,
                     'view_any_teams' => true,
                     'update_any_teams' => true,
-                ], $multiplier_permissions ),
+                ], $general_team_admin_permissions ),
                 'order' => 20
             ];
         }
 
-        // if the user can access contact they also can access this post type
-        // foreach ( $expected_roles as $role => $role_value ){
-        //     if ( isset( $expected_roles[$role]['permissions']['access_contacts'] ) && $expected_roles[$role]['permissions']['access_contacts'] ){
-        //         $expected_roles[$role]['permissions']['access_' . $this->post_type ] = true;
-        //         $expected_roles[$role]['permissions']['create_' . $this->post_type] = true;
-        //         $expected_roles[$role]['permissions']['update_' . $this->post_type] = true;
-        //     }
-        // }
 
         // Only admins can view/update the teams post type
         if ( isset( $expected_roles['administrator'] ) ){
