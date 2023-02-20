@@ -125,7 +125,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
             ];
         }
 
-        if( !isset( $expected_roles['team_leader'] ) ) {
+        if ( !isset( $expected_roles['team_leader'] ) ){
             $expected_roles['team_leader'] = [
                 'label' => __( 'Team Leader', 'disciple-tools-team-module' ),
                 'description' => 'Access to all Contacts, Groups, etc. for all teams and access to update their team',
