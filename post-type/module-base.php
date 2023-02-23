@@ -93,11 +93,11 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
             'access_trainings' => true,
             'create_trainings' => true,
             'update_trainings' => true,
-            'access_teams' => true,
+            'list_all_teams' => true,
         ], $multiplier_permissions );
 
 
-        $general_team_admin_permissions = wp_parse_args( [
+        $general_all_teams_permissions = wp_parse_args( [
             'dt_all_access_contacts' => true, //view and update all access contacts
 
             'view_any_groups' => true,
@@ -109,7 +109,6 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
 
         if ( !isset( $expected_roles['team_member'] ) ){
             $expected_roles['team_member'] = [
-
                 'label' => __( 'Team Member', 'disciple-tools-team-module' ),
                 'description' => 'Interacts with Contacts, Groups, etc., for a given team',
                 'permissions' => $base_team_member_permissions,
@@ -120,7 +119,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
             $expected_roles['team_collaborator'] = [
                 'label' => __( 'Team Collaborator', 'disciple-tools-team-module' ),
                 'description' => 'Access to all Contacts, Groups, etc. for all teams',
-                'permissions' => wp_parse_args( [], $general_team_admin_permissions ),
+                'permissions' => wp_parse_args( [], $general_all_teams_permissions ),
                 'order' => 20
             ];
         }
@@ -130,9 +129,10 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                 'label' => __( 'Team Leader', 'disciple-tools-team-module' ),
                 'description' => 'Access to all Contacts, Groups, etc. for all teams and access to update their team',
                 'permissions' => wp_parse_args( [
+                    'access_teams' => true,
                     'view_any_teams' => true,
                     'update_my_teams' => true,
-                ], $general_team_admin_permissions ),
+                ], $general_all_teams_permissions ),
                 'order' => 20
             ];
         }
@@ -143,12 +143,12 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                 'description' => 'Admin access to all teams',
                 'permissions' => wp_parse_args( [
                     'view_project_metrics' => true,
-                    'list_users' => true,
 
+                    'access_teams' => true,
                     'create_teams' => true,
                     'view_any_teams' => true,
                     'update_any_teams' => true,
-                ], $general_team_admin_permissions ),
+                ], $general_all_teams_permissions ),
                 'order' => 20
             ];
         }
@@ -356,7 +356,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
 
             $can_view_single = current_user_can( 'access_specific_teams' ) && count( $user_team_ids ) === 1;
             $can_view_any = current_user_can( 'view_any_' . $post_type ) || current_user_can( 'dt_all_access_' . $post_type );
-            if ( !$can_view_single ) {
+            if ( !$can_view_single || $can_view_any ) {
 
                 foreach ( $team_counts as $team_id => $team_count ) {
                     $can_view_team = $can_view_any || array_search( $team_id, $user_team_ids ) > -1;
@@ -390,7 +390,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
             // if has permission access_specific_teams and user.teams matches
         } else {
             //give user permission to all posts their team(s) are assigned to
-            if ( current_user_can( 'access_specific_teams' ) ) {
+            if ( !current_user_can( "view_any_$post_type" ) && current_user_can( 'access_specific_teams' ) ) {
                 $team_ids = self::get_user_teams();
 
                 $permissions[] = [ 'teams' => $team_ids ];
