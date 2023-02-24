@@ -392,8 +392,9 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
             //give user permission to all posts their team(s) are assigned to
             if ( !current_user_can( "view_any_$post_type" ) && current_user_can( 'access_specific_teams' ) ) {
                 $team_ids = self::get_user_teams();
-
-                $permissions[] = [ 'teams' => $team_ids ];
+                if ( !empty( $team_ids ) ){
+                    $permissions[] = [ 'teams' => $team_ids ];
+                }
             }
         }
         return $permissions;
