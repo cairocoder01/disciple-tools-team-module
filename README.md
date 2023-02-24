@@ -26,7 +26,45 @@ https://youtu.be/7Ww_tTDrtio
 
 #### Will Not Do
 
+### Roles
+#### Team Member
+User will see only the contacts, groups, and other posts that are either assigned to their team 
+or directly shared with them.
 
+**Permissions:**
+- Create/View/Update/Assign contacts assigned to team/self
+- Create/View/Update groups assigned to team/self
+- Create/View/Update trainings assigned to team/self
+- List users
+- List teams
+
+#### Team Collaborator
+User can see all of the contacts, groups, and other post types in the system. 
+This allows them to communicate between teams and assign contacts to additional teams when needed. 
+On their list view, they have a quick filter to view just those posts that are assigned to their 
+team or any other team.
+
+**Permissions:**
+- All Team Member permissions (above)
+- View/Update/Assign any access contacts
+- View/Update any groups
+- View/Update any trainings
+
+#### Team Leader
+User can see all of the contacts, groups, and other post types in the system.
+User can see all teams but can only edit their own.
+
+**Permissions:**
+- All Team Collaborator permissions (above)
+- View any teams
+- Update own teams
+
+#### Teams Admin
+User can access and edit all post types, including creating and updating all teams.
+
+**Permissions:**
+- All Team Leader permissions (above)
+- Create/View/Update any teams
 
 ## Requirements
 
