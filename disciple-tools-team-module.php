@@ -5,7 +5,7 @@
  * Description: The Team Module adds a way to access and share contacts and groups in a collaborative team setting.
  * Text Domain: disciple-tools-team-module
  * Domain Path: /languages
- * Version:  0.4.2
+ * Version:  1.0.0
  * Author URI: https://github.com/cairocoder01
  * GitHub Plugin URI: https://github.com/cairocoder01/disciple-tools-team-module
  * Requires at least: 4.7.0
@@ -38,7 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return object|bool
  */
 function disciple_tools_team_module() {
-    $disciple_tools_team_module_required_dt_theme_version = '1.19';
+    $disciple_tools_team_module_required_dt_theme_version = '1.37.0';
     $wp_theme = wp_get_theme();
     $version = $wp_theme->version;
 
