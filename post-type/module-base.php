@@ -46,7 +46,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
         add_filter( 'dt_post_create_fields', [ $this, 'dt_post_create_fields' ], 50, 2 );
 
         //list
-        add_filter( 'dt_user_list_filters', [ $this, 'dt_user_list_filters' ], 10, 2 );
+        add_filter( 'dt_user_list_filters', [ $this, 'dt_user_list_filters' ], 100, 2 );
         add_filter( 'dt_filter_access_permissions', [ $this, 'dt_filter_access_permissions' ], 20, 2 );
         add_filter( 'dt_can_view_permission', [ $this, 'can_view_permission_filter' ], 10, 3 );
         add_filter( 'dt_can_update_permission', [ $this, 'dt_can_update_permission' ], 20, 3 );
@@ -324,7 +324,6 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                         'name' => _x( 'All', 'All records', 'disciple_tools' ),
                         'query' => [
                             'sort' => '-post_date',
-                            'status' => [ '-closed' ]
                         ],
                     ];
                 }
@@ -349,7 +348,6 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                 'name' => __( 'Team', 'disciple-tools-team-module' ),
                 'query' => [
                     'teams' => $user_team_ids,
-                    'sort' => 'status'
                 ],
                 'count' => $total_my ?: null,
             ];
@@ -368,7 +366,6 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                             'name' => $team_count['name'],
                             'query' => [
                                 'teams' => [ $team_id ],
-                                'sort' => 'status'
                             ],
                             'count' => $team_count['count'],
                             'subfilter' => true
