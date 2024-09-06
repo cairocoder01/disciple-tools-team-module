@@ -102,6 +102,18 @@ class Disciple_Tools_Team_Module {
         require_once( 'post-type/loader.php' ); // add starter post type extension to Disciple.Tools system
 
         /**
+         * @todo Decide if you want to create a magic link
+         * To remove: delete the line below and remove the folder named /magic-link
+         */
+        // require_once( 'magic-link/post-type-magic-link/magic-link-post-type.php' );
+        // require_once( 'magic-link/magic-link-user-app.php' );
+        require_once( 'magic-link/magic-link-login-user-app.php' );
+        // require_once( 'magic-link/magic-link-non-object.php' );
+        // require_once( 'magic-link/magic-link-map.php' );
+//        require_once( 'magic-link/magic-link-home.php' );
+
+
+        /**
          * @todo Decide if you want to add a custom admin page in the admin area
          * To remove: delete the 3 lines below and remove the folder named /admin
          */
