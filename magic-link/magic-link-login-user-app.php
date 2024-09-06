@@ -60,8 +60,20 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
                     'label' => ''
                 ],
                 [
-                    'id'    => 'overall_status',
-                    'label' => ''
+                    'id'    => 'age',
+                    'label' => 'Age'
+                ],
+                [
+                    'id'    => 'seeker_path',
+                    'label' => 'Seeker Path'
+                ],
+                [
+                    'id'  => 'contact_address',
+                    'label' => 'Address'
+                ],
+                [
+                    'id'    => 'location',
+                    'label' => 'Location'
                 ],
                 [
                     'id'    => 'faith_status',
@@ -293,8 +305,7 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
                 // Iterate over returned posts
                 if (data['posts']) {
                     data['posts'].forEach(v => {
-
-                        let html = `<tr onclick="get_assigned_contact_details('${window.lodash.escape(v.id)}', '${window.lodash.escape(window.lodash.replace(v.name, "'", "&apos;"))}');">
+                        let html = `<tr onclick="get_assigned_contact_details('${window.lodash.escape(v.ID)}', '${window.lodash.escape(window.lodash.replace(v.name, "'", "&apos;"))}');">
                                 <td>${window.lodash.escape(v.name)}</td>
                             </tr>`;
 
@@ -320,9 +331,12 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
              * Fetch requested contact details
              */
             window.get_contact = (post_id) => {
+                console.log(post_id);
                 let comment_count = 2;
 
                 jQuery('.form-content-table').fadeOut('fast', function () {
+
+                    console.log(jsObject);
 
                     // Dispatch request call
                     jQuery.ajax({
@@ -515,10 +529,11 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
              * Handle fetch request for contact details
              */
             window.get_assigned_contact_details = (post_id, post_name) => {
-                let contact_name = jQuery('#contact_name');
+                console.log('get_assigned_contact_details', post_id, post_name);
+                let contact_name = document.querySelector('#contact_name');
 
                 // Update contact name
-                contact_name.html(post_name);
+                contact_name.innerHTML = post_name;
 
                 // Fetch requested contact details
                 window.get_contact(post_id);
@@ -789,6 +804,25 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
             ]
         );
         register_rest_route(
+            $namespace, '/' . $this->type . '/post', [
+                [
+                    'methods'             => 'GET',
+                    'callback'            => [ $this, 'get_post' ],
+                    'permission_callback' => function ( WP_REST_Request $request ) {
+                        $magic = new DT_Magic_URL( $this->root );
+
+                        /**
+                         * Adjust global values accordingly, so as to accommodate both wp_user
+                         * and post requests.
+                         */
+                        $this->adjust_global_values_by_incoming_sys_type( $request->get_params()['sys_type'] );
+
+                        return $magic->verify_rest_endpoint_permissions_on_post( $request );
+                    },
+                ],
+            ]
+        );
+        register_rest_route(
             $namespace, '/'.$this->type, [
                 [
                     'methods'  => 'POST',
@@ -801,39 +835,119 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
                 ],
             ]
         );
+
+        register_rest_route(
+            $namespace, '/' . $this->type . '/update', [
+                [
+                    'methods'             => 'GET',
+                    'callback'            => [ $this, 'update_record' ],
+                    'permission_callback' => function ( WP_REST_Request $request ) {
+                        $magic = new DT_Magic_URL( $this->root );
+
+                        /**
+                         * Adjust global values accordingly, so as to accommodate both wp_user
+                         * and post requests.
+                         */
+                        $this->adjust_global_values_by_incoming_sys_type( $request->get_params()['sys_type'] );
+
+                        return $magic->verify_rest_endpoint_permissions_on_post( $request );
+                    },
+                ],
+            ]
+        );
     }
 
     public function update_record( WP_REST_Request $request ) {
         $params = $request->get_params();
+        dt_write_log('update_record');
+        dt_write_log($params);
+
+        if ( !isset( $params['post_id'], $params['parts'], $params['action'], $params['sys_type'] ) ){
+            return new WP_Error( __METHOD__, 'Missing core parameters', [ 'status' => 400 ] );
+        }
+
+        // Sanitize and fetch user id
         $params = dt_recursive_sanitize_array( $params );
 
-        $post_id = $params['parts']['post_id']; //has been verified in verify_rest_endpoint_permissions_on_post()
-
-        $args = [];
-        if ( !is_user_logged_in() ){
-            $global_name = apply_filters( 'dt_magic_link_global_name', __( 'Magic Link', 'disciple_tools' ) );
-            $args['comment_author'] = sprintf( __( '%s Submission', 'disciple_tools' ), $global_name );
-            wp_set_current_user( 0 );
-            $current_user = wp_get_current_user();
-            $current_user->add_cap( 'magic_link' );
-            $current_user->display_name = sprintf( __( '%s Submission', 'disciple_tools' ), $global_name );
+        // Update logged-in user state if required accordingly, based on their sys_type
+        if ( ! is_user_logged_in() ) {
+            $this->update_user_logged_in_state( $params['sys_type'], $params['parts']['post_id'] );
         }
 
-        if ( isset( $params['update']['comment'] ) && !empty( $params['update']['comment'] ) ){
-            $update = DT_Posts::add_post_comment( $this->post_type, $post_id, $params['update']['comment'], 'comment', $args, false );
-            if ( is_wp_error( $update ) ){
-                return $update;
+        // Capture name, if present
+        $updates = [];
+        if ( isset( $params['name'] ) && !empty( $params['name'] ) ){
+            $updates['name'] = $params['name'];
+        }
+
+        // Capture overall status
+        if ( isset( $params['overall_status'] ) && !empty( $params['overall_status'] ) ){
+            $updates['overall_status'] = $params['overall_status'];
+        }
+
+        // Capture faith status
+        if ( isset( $params['faith_status'] ) ){
+            $updates['faith_status'] = $params['faith_status'];
+        }
+
+        // Capture milestones
+        if ( isset( $params['milestones'] ) ){
+            $milestones = [];
+            foreach ( $params['milestones'] ?? [] as $milestone ){
+                $entry = [];
+                $entry['value'] = $milestone['value'];
+                if ( strtolower( trim( $milestone['delete'] ) ) === 'true' ){
+                    $entry['delete'] = true;
+                }
+                $milestones[] = $entry;
+            }
+            if ( !empty( $milestones ) ){
+                $updates['milestones'] = [
+                    'values' => $milestones
+                ];
             }
         }
 
-        if ( isset( $params['update']['start_date'] ) && !empty( $params['update']['start_date'] ) ){
-            $update = DT_Posts::update_post( $this->post_type, $post_id, [ 'start_date' => $params['update']['start_date'] ], false, false );
-            if ( is_wp_error( $update ) ){
-                return $update;
+        // Update specified post record
+        if ( empty( $params['post_id'] ) ) {
+            // if ID is empty ("0", 0, or generally falsy), create a new post
+            $updates['type'] = 'access';
+
+            // Assign new item to parent post record.
+            if ( isset( $params['parts']['post_id'] ) ){
+                $updates['assigned_to'] = 'user-' . $params['parts']['post_id'];
+            }
+
+            $updated_post = DT_Posts::create_post( 'contacts', $updates, false, false );
+        } else {
+            $updated_post = DT_Posts::update_post( 'contacts', $params['post_id'], $updates, false, false );
+        }
+        if ( empty( $updated_post ) || is_wp_error( $updated_post ) ) {
+            return [
+                'id' => 0,
+                'success' => false,
+                'message' => 'Unable to update/create contact record details!'
+            ];
+        }
+
+        // Add any available comments
+        if ( isset( $params['comments'] ) && ! empty( $params['comments'] ) ) {
+            $updated_comment = DT_Posts::add_post_comment( $updated_post['post_type'], $updated_post['ID'], $params['comments'], 'comment', [], false );
+            if ( empty( $updated_comment ) || is_wp_error( $updated_comment ) ) {
+                return [
+                    'id' => $updated_post['ID'],
+                    'success' => false,
+                    'message' => 'Unable to add comment to contact record details!'
+                ];
             }
         }
 
-        return true;
+        // Finally, return successful response
+        return [
+            'id' => $updated_post['ID'],
+            'success' => true,
+            'message' => ''
+        ];
     }
 
     public function endpoint_get( WP_REST_Request $request ) {
@@ -908,38 +1022,21 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
         return $response;
     }
 
-    public function endpoint_get_orig( WP_REST_Request $request ) {
+    public function get_post( WP_REST_Request $request ) {
         $params = $request->get_params();
-        if ( ! isset( $params['parts'], $params['action'] ) ) {
+        if ( ! isset( $params['post_id'], $params['parts'], $params['action'], $params['comment_count'], $params['sys_type'] ) ) {
             return new WP_Error( __METHOD__, 'Missing parameters', [ 'status' => 400 ] );
         }
 
+        // Sanitize and fetch user/post id
         $params = dt_recursive_sanitize_array( $params );
 
-        $contact_id = get_user_option( 'corresponds_to_contact', $user_id ) ?: [];
-
-
+        // Update logged-in user state if required accordingly, based on their sys_type
         if ( ! is_user_logged_in() ){
             $this->update_user_logged_in_state( $params['sys_type'], $params['parts']['post_id'] );
         }
-        // get all teams this user is a member of
-        $connections = p2p_get_connections( 'teams_to_contacts', [
-            'from' => $contact_id,
-        ]);
 
-
-        $team_ids = array_map( function ( $connection ) {
-            return $connection->p2p_to;
-        }, $connections );
-
-        $team_connections = p2p_get_connections( 'contacts_to_teams', [
-            'from' => $team_ids,
-        ]);
-
-        $team_contacts = array_map( function ( $connection ) {
-            return $connection->p2p_to;
-        }, $team_connections );
-
+        // Fetch corresponding contacts post record
         $response = [];
         if ( $params['post_id'] > 0 ){
             $post = DT_Posts::get_post( 'contacts', $params['post_id'], false );
@@ -958,6 +1055,22 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
         }
 
         return $response;
+    }
+
+
+    public function update_user_logged_in_state( $sys_type, $user_id ) {
+        switch ( strtolower( trim( $sys_type ) ) ) {
+            case 'post':
+                wp_set_current_user( 0 );
+                $current_user = wp_get_current_user();
+                $current_user->add_cap( 'magic_link' );
+                $current_user->display_name = sprintf( __( '%s Submission', 'disciple_tools' ), apply_filters( 'dt_magic_link_global_name', __( 'Magic Link', 'disciple_tools' ) ) );
+                break;
+            default: // wp_user
+                wp_set_current_user( $user_id );
+                break;
+
+        }
     }
 }
 Disciple_Tools_Team_Module_Magic_Login_User_App::instance();
