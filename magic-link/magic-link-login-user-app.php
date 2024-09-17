@@ -7,10 +7,10 @@ if ( !defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly.
  */
 class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base {
 
-    public $page_title = 'Starter - Magic Links - Login User App';
-    public $page_description = 'Login User App - Magic Links.';
-    public $root = 'starter_magic_login_app'; // @todo define the root of the url {yoursite}/root/type/key/action
-    public $type = 'starter_user_login_app'; // @todo define the type
+    public $page_title = 'Your Teams Contacts App';
+    public $page_description = 'See All the Contacts Assigned to Your Team';
+    public $root = 'teams_contacts_app'; // @todo define the root of the url {yoursite}/root/type/key/action
+    public $type = 'teams_contacts_app'; // @todo define the type
     public $post_type = 'user';
     private $meta_key = '';
     public $show_bulk_send = true;
