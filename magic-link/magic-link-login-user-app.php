@@ -208,6 +208,10 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
                 border-bottom: 1px solid #cacaca;
             }
 
+            .api-content-table thead {
+                border: none;
+                border-bottom: 1px solid #f1f1f1;
+            }
             .api-content-table tbody {
                 border: none;
             }
@@ -353,6 +357,19 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
                 return teamColors[teamName];
             }
 
+            // create locale date from timestamp
+            function formatLocaleDate(phpTimestamp) {
+                const locale = document.querySelector('html').getAttribute("lang")? document.querySelector('html').getAttribute("lang").replace('_', '-') : 'en-US';
+
+                const jsTimestamp = phpTimestamp * 1000; // Convert PHP timestamp to JavaScript timestamp
+                const date = new Date(jsTimestamp);
+                return date.toLocaleDateString(locale, {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit'
+                });
+            }
+
             /**
              * Display returned list of assigned contacts
              */
@@ -370,6 +387,7 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
                 // Iterate over returned posts
                 if (data['posts']) {
                     data['posts'].forEach(v => {
+                        console.log(v);
                         let html = `<tr onclick="get_assigned_contact_details('${window.lodash.escape(v.ID)}', '${window.lodash.escape(window.lodash.replace(v.name, "'", "&apos;"))}');">
                                 <td>${window.lodash.escape(v.name)}</td>
                                 <td class="teamBadgeContainer">
@@ -382,6 +400,7 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
                                         return `<span class="teamBadge ${teamClassName}" style="background-color:${teamBackgroundColor}; color:${teamTextColor}">${window.lodash.escape(teamName)}</span>`;
                                     }).join('') : ''}
                                 </td>
+                                <td>${formatLocaleDate(v.post_date.timestamp)}</td>
                             </tr>`;
 
                         table.find('tbody').append(html);
@@ -817,11 +836,12 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
                     <hr>
                     <div class="grid-x api-content-div-style" id="api-content">
                         <table class="api-content-table">
+                            <thead>
+                                <th><?php esc_html_e( 'Name', 'disciple_tools' ) ?></th>
+                                <th><?php esc_html_e( 'Teams', 'disciple_tools' ) ?>
+                                <th><?php esc_html_e( 'Creation Date', 'disciple_tools' ) ?></th>
+                            </thead>
                             <tbody>
-                                <th>
-                                    <th><?php esc_html_e( 'Name', 'disciple_tools' ) ?></th>
-                                    <th><?php esc_html_e( 'Teams', 'disciple_tools' ) ?>
-                                </th>
                             </tbody>
                         </table>
                     </div>
