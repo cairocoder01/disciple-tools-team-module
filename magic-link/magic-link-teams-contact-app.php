@@ -387,7 +387,6 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
                 // Iterate over returned posts
                 if (data['posts']) {
                     data['posts'].forEach(v => {
-                        console.log(v);
                         let html = `<tr onclick="get_assigned_contact_details('${window.lodash.escape(v.ID)}', '${window.lodash.escape(window.lodash.replace(v.name, "'", "&apos;"))}');">
                                 <td>${window.lodash.escape(v.name)}</td>
                                 <td class="teamBadgeContainer">
