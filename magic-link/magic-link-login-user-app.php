@@ -1076,9 +1076,9 @@ console.log(data['posts']);
                 'from' => $team_ids,
             ]);
 
-            $team_contacts = array_map( function ( $connection ) {
+            $team_contacts = array_unique(array_map(function ($connection) {
                 return $connection->p2p_to;
-            }, $team_connections );
+            }, $team_connections));
 
             $posts = [];
             $comments = [];
