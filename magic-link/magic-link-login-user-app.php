@@ -219,7 +219,8 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
             }
 
             .teamBadge {
-                background-color: #f5f5f5;
+                background-color: #7899;
+                color: #f5f5f5;
                 border-radius: 5px;
                 padding: 0.2em;
                 font-size: 0.8em;
@@ -299,7 +300,7 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
               .replace(/^-+|-+$/g, '');     // Remove leading and trailing hyphens
             }
 
-            // Function to generate a unique color based on a string
+            // Function to generate a unique color based on a string and the appropriate contrasting text color
             function stringToColor(str) {
                 let hash = 0;
                 for (let i = 0; i < str.length; i++) {
@@ -310,7 +311,17 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
                     let value = (hash >> (i * 8)) & 0xFF;
                     color += ('00' + value.toString(16)).substr(-2);
                 }
-                return color;
+
+                // Calculate luminance
+                const r = parseInt(color.substr(1, 2), 16) / 255;
+                const g = parseInt(color.substr(3, 2), 16) / 255;
+                const b = parseInt(color.substr(5, 2), 16) / 255;
+                const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+                // Determine contrasting text color
+                const textColor = luminance > 0.5 ? '#000000' : '#FFFFFF';
+
+                return { backgroundColor: color, textColor: textColor };
             }
 
             // Object to store generated colors for each team
@@ -348,8 +359,10 @@ console.log(data['posts']);
                                     ${v.teams && v.teams.length > 0 ? v.teams.map(team => {
                                         let teamName = team.post_title;
                                         let teamClassName = convertToClassName(teamName);
-                                        let teamColor = getTeamColor(teamName);
-                                        return `<span class="teamBadge ${teamClassName}" style="background-color:${teamColor}">${window.lodash.escape(teamName)}</span>`;
+                                        let teamColors = getTeamColor(teamName);
+                                        let teamBackgroundColor = teamColors.backgroundColor;
+                                        let teamTextColor = teamColors.textColor;
+                                        return `<span class="teamBadge ${teamClassName}" style="background-color:${teamBackgroundColor}; color:${teamTextColor}">${window.lodash.escape(teamName)}</span>`;
                                     }).join('') : ''}
                                 </td>
                             </tr>`;
