@@ -197,11 +197,15 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
                 padding: 1em;
             }
 
+            #assigned_contacts_div {
+            }
+
             .api-content-div-style {
-                height: 300px;
+                height: 45dvh;
                 overflow-x: hidden;
                 overflow-y: scroll;
-                text-align: left;
+                text-align: start;
+                border-bottom: 1px solid #cacaca;
             }
 
             .api-content-table tbody {
@@ -218,12 +222,18 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
                 background-color: #f5f5f5;
             }
 
+            .teamBadgeContainer {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5em;
+            }
+
             .teamBadge {
                 background-color: #7899;
                 color: #f5f5f5;
                 border-radius: 5px;
-                padding: 0.2em;
-                font-size: 0.8em;
+                padding: 0.2em .5em;
+                font-size: .95rem;
             }
         </style>
         <?php
@@ -309,6 +319,14 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
                 let color = '#';
                 for (let i = 0; i < 3; i++) {
                     let value = (hash >> (i * 8)) & 0xFF;
+                    if (i === 3) { // Increase the blue component
+                        value = Math.min(value - 100, 255); // Ensure it doesn't exceed 255
+                    } else if (i === 2) { // Increase the blue component
+                        value = Math.min(value + 100, 255); // Ensure it doesn't exceed 255
+                    }
+                     else {
+                        value = Math.max(value - 50, 0); // Decrease red and green components
+                    }
                     color += ('00' + value.toString(16)).substr(-2);
                 }
 
@@ -319,7 +337,7 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
                 const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
 
                 // Determine contrasting text color
-                const textColor = luminance > 0.5 ? '#000000' : '#FFFFFF';
+                const textColor = luminance > 0.6 ? '#333333' : '##f5f5f5';
 
                 return { backgroundColor: color, textColor: textColor };
             }
@@ -349,13 +367,12 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
 
                 // Set total hits count
                 total.html(data.posts ? data.posts.length : '0');
-console.log(data['posts']);
                 // Iterate over returned posts
                 if (data['posts']) {
                     data['posts'].forEach(v => {
                         let html = `<tr onclick="get_assigned_contact_details('${window.lodash.escape(v.ID)}', '${window.lodash.escape(window.lodash.replace(v.name, "'", "&apos;"))}');">
                                 <td>${window.lodash.escape(v.name)}</td>
-                                <td>
+                                <td class="teamBadgeContainer">
                                     ${v.teams && v.teams.length > 0 ? v.teams.map(team => {
                                         let teamName = team.post_title;
                                         let teamClassName = convertToClassName(teamName);
@@ -622,6 +639,8 @@ console.log(data['posts']);
              * Handle fetch request for contact details
              */
             window.get_assigned_contact_details = (post_id, post_name) => {
+                let contact_container = document.querySelector('.contact_detail_container');
+
                 let contact_name = document.querySelector('#contact_name');
 
                 // Update contact name
@@ -629,6 +648,10 @@ console.log(data['posts']);
 
                 // Fetch requested contact details
                 window.get_contact(post_id);
+
+                if (contact_container.style.display === 'none') {
+                    contact_container.style.display = 'block';
+                }
             };
 
             /**
@@ -648,15 +671,6 @@ console.log(data['posts']);
                     window.get_magic();
                     break;
             }
-
-            /**
-             * Create new record
-             */
-
-            jQuery('#add_new').on('click', function () {
-                jQuery('#contact_name').html('');
-                window.get_contact(0);
-            });
 
             /**
              * Submit contact details
@@ -782,9 +796,9 @@ console.log(data['posts']);
         ?>
          <div id="custom-style"></div>
         <div id="wrapper">
-            <div class="grid-x">
+            <div class="grid-x header">
                 <div class="cell center">
-                    <h2 id="title"><b><?php esc_html_e( 'Your Teams Contacts', 'disciple_tools' ) ?></b></h2>
+                    <h2 id="title"><b><?php esc_html_e( "Your Teams' Contacts", 'disciple_tools' ) ?></b></h2>
                 </div>
             </div>
             <hr>
@@ -804,88 +818,86 @@ console.log(data['posts']);
                     <div class="grid-x api-content-div-style" id="api-content">
                         <table class="api-content-table">
                             <tbody>
+                                <th>
+                                    <th><?php esc_html_e( 'Name', 'disciple_tools' ) ?></th>
+                                    <th><?php esc_html_e( 'Teams', 'disciple_tools' ) ?>
+                                </th>
                             </tbody>
                         </table>
                     </div>
-                    <br>
-
-                    <?php if ( ( isset( $link_obj ) && ( property_exists( $link_obj, 'type_config' ) && property_exists( $link_obj->type_config, 'supports_create' ) && $link_obj->type_config->supports_create ) ) || ( ! property_exists( $link_obj, 'type_config' ) ) ): ?>
-                        <button id="add_new" class="button select-button">
-                            <?php esc_html_e( 'Add New', 'disciple_tools' ) ?>
-                        </button>
-                    <?php endif; ?>
                 </div>
 
                 <!-- ERROR MESSAGES -->
                 <span id="error" style="color: red;"></span>
                 <br>
 
-                <h3><span id="contact_name"></span>
-                </h3>
-                <hr>
-                <div class="grid-x" id="form-content">
-                    <input id="post_id" type="hidden"/>
-                    <?php
-                    $field_settings = DT_Posts::get_post_field_settings( 'contacts', false );
-                    ?>
-                    <table style="display: none;" class="form-content-table">
-                        <tbody>
-                        <tr id="form_content_name_tr">
-                            <td style="vertical-align: top;">
-                                <b><?php echo esc_attr( $field_settings['name']['name'] ); ?></b></td>
-                            <td id="form_content_name_td"></td>
-                        </tr>
-                        <tr id="form_content_date_of_birth_tr">
-                            <td style="vertical-align: top;">
-                                <b><?php echo esc_attr( $field_settings['date_of_birth']['name'] ); ?></b></td>
-                            <td id="form_content_date_of_birth_td"></td>
-                        </tr>
-                        <tr id="form_content_contact_address_tr">
-                            <td style="vertical-align: top;">
-                                <b><?php echo esc_attr( $field_settings['contact_address']['name'] ); ?></b></td>
-                            <td id="form_content_contact_address_td"></td>
-                        </tr>
-                        <tr id="form_content_contact_phone_tr">
-                            <td style="vertical-align: top;">
-                                <b><?php echo esc_attr( $field_settings['contact_phone']['name'] ); ?></b></td>
-                            <td id="form_content_contact_phone_td"></td>
-                        </tr>
-                        <tr id="form_content_nedenisa_prayer_request_tr">
-                            <td style="vertical-align: top;">
-                                <b><?php echo esc_attr( $field_settings['nedenisa_prayer_request']['name'] ); ?></b></td>
-                            <td id="form_content_nedenisa_prayer_request_td"></td>
-                        </td>
-                        <tr id="form_content_milestones_tr">
-                            <td style="vertical-align: top;">
-                                <b><?php echo esc_attr( $field_settings['milestones']['name'] ); ?></b></td>
-                            <td id="form_content_milestones_td"></td>
-                        </tr>
-                        <tr id="form_content_overall_status_tr">
-                            <td style="vertical-align: top;">
-                                <b><?php echo esc_attr( $field_settings['overall_status']['name'] ); ?></b></td>
-                            <td id="form_content_overall_status_td"></td>
-                        </tr>
-                        <tr id="form_content_faith_status_tr">
-                            <td style="vertical-align: top;">
-                                <b><?php echo esc_attr( $field_settings['faith_status']['name'] ); ?></b></td>
-                            <td id="form_content_faith_status_td"></td>
-                        </tr>
-                        <tr id="form_content_comments_tr">
-                            <td style="vertical-align: top;">
-                                <b><?php esc_html_e( 'Comments', 'disciple_tools' ) ?></b>
+                <div class="contact_detail_container" style="display: none;">
+                    <h3><span id="contact_name"></span></h3>
+                    <hr>
+                    <div class="grid-x" id="form-content">
+                        <input id="post_id" type="hidden"/>
+                        <?php
+                        $field_settings = DT_Posts::get_post_field_settings( 'contacts', false );
+                        ?>
+                        <table style="display: none;" class="form-content-table">
+                            <tbody>
+                            <tr id="form_content_name_tr">
+                                <td style="vertical-align: top;">
+                                    <b><?php echo esc_attr( $field_settings['name']['name'] ); ?></b></td>
+                                <td id="form_content_name_td"></td>
+                            </tr>
+                            <tr id="form_content_date_of_birth_tr">
+                                <td style="vertical-align: top;">
+                                    <b><?php echo esc_attr( $field_settings['date_of_birth']['name'] ); ?></b></td>
+                                <td id="form_content_date_of_birth_td"></td>
+                            </tr>
+                            <tr id="form_content_contact_address_tr">
+                                <td style="vertical-align: top;">
+                                    <b><?php echo esc_attr( $field_settings['contact_address']['name'] ); ?></b></td>
+                                <td id="form_content_contact_address_td"></td>
+                            </tr>
+                            <tr id="form_content_contact_phone_tr">
+                                <td style="vertical-align: top;">
+                                    <b><?php echo esc_attr( $field_settings['contact_phone']['name'] ); ?></b></td>
+                                <td id="form_content_contact_phone_td"></td>
+                            </tr>
+                            <tr id="form_content_nedenisa_prayer_request_tr">
+                                <td style="vertical-align: top;">
+                                    <b><?php echo esc_attr( $field_settings['nedenisa_prayer_request']['name'] ); ?></b></td>
+                                <td id="form_content_nedenisa_prayer_request_td"></td>
                             </td>
-                            <td id="form_content_comments_td"></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <br>
+                            <tr id="form_content_milestones_tr">
+                                <td style="vertical-align: top;">
+                                    <b><?php echo esc_attr( $field_settings['milestones']['name'] ); ?></b></td>
+                                <td id="form_content_milestones_td"></td>
+                            </tr>
+                            <tr id="form_content_overall_status_tr">
+                                <td style="vertical-align: top;">
+                                    <b><?php echo esc_attr( $field_settings['overall_status']['name'] ); ?></b></td>
+                                <td id="form_content_overall_status_td"></td>
+                            </tr>
+                            <tr id="form_content_faith_status_tr">
+                                <td style="vertical-align: top;">
+                                    <b><?php echo esc_attr( $field_settings['faith_status']['name'] ); ?></b></td>
+                                <td id="form_content_faith_status_td"></td>
+                            </tr>
+                            <tr id="form_content_comments_tr">
+                                <td style="vertical-align: top;">
+                                    <b><?php esc_html_e( 'Comments', 'disciple_tools' ) ?></b>
+                                </td>
+                                <td id="form_content_comments_td"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <br>
 
-                <!-- SUBMIT UPDATES -->
-                <button id="content_submit_but" style="display: none; min-width: 100%;" class="button select-button">
-                    <?php esc_html_e( 'Submit Update', 'disciple_tools' ) ?>
-                    <span class="update-loading-spinner loading-spinner" style="height: 17px; width: 17px; vertical-align: text-bottom;"></span>
-                </button>
+                    <!-- SUBMIT UPDATES -->
+                    <button id="content_submit_but" style="display: none; min-width: 100%;" class="button select-button">
+                        <?php esc_html_e( 'Submit Update', 'disciple_tools' ) ?>
+                        <span class="update-loading-spinner loading-spinner" style="height: 17px; width: 17px; vertical-align: text-bottom;"></span>
+                    </button>
+                </div>
             </div>
         </div>
         <?php
