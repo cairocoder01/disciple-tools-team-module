@@ -217,6 +217,13 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
             .api-content-table tr:hover {
                 background-color: #f5f5f5;
             }
+
+            .teamBadge {
+                background-color: #f5f5f5;
+                border-radius: 5px;
+                padding: 0.2em;
+                font-size: 0.8em;
+            }
         </style>
         <?php
     }
@@ -230,7 +237,6 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
     public function header_javascript(){
         ?>
         <script>
-            console.log('insert header_javascript')
         </script>
         <?php
     }
@@ -278,7 +284,6 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
                     }
                 })
                     .done(function (data) {
-                        console.log(data);
                         window.load_magic(data)
                     })
                     .fail(function (e) {
@@ -286,6 +291,38 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
                         jQuery('#error').html(e)
                     })
             };
+
+            /** convert team name to a class name */
+            function convertToClassName(str) {
+               return str.toLowerCase()
+              .replace(/[^a-z0-9]+/g, '-')  // Replace non-alphanumeric characters with hyphens
+              .replace(/^-+|-+$/g, '');     // Remove leading and trailing hyphens
+            }
+
+            // Function to generate a unique color based on a string
+            function stringToColor(str) {
+                let hash = 0;
+                for (let i = 0; i < str.length; i++) {
+                    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+                }
+                let color = '#';
+                for (let i = 0; i < 3; i++) {
+                    let value = (hash >> (i * 8)) & 0xFF;
+                    color += ('00' + value.toString(16)).substr(-2);
+                }
+                return color;
+            }
+
+            // Object to store generated colors for each team
+            const teamColors = {};
+
+            // Function to get or generate a color for a team
+            function getTeamColor(teamName) {
+                if (!teamColors[teamName]) {
+                    teamColors[teamName] = stringToColor(teamName);
+                }
+                return teamColors[teamName];
+            }
 
             /**
              * Display returned list of assigned contacts
@@ -300,13 +337,21 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
                 table.find('tbody').empty()
 
                 // Set total hits count
-                total.html(data['total'] ? data['total'] : '0');
-
+                total.html(data.posts ? data.posts.length : '0');
+console.log(data['posts']);
                 // Iterate over returned posts
                 if (data['posts']) {
                     data['posts'].forEach(v => {
                         let html = `<tr onclick="get_assigned_contact_details('${window.lodash.escape(v.ID)}', '${window.lodash.escape(window.lodash.replace(v.name, "'", "&apos;"))}');">
                                 <td>${window.lodash.escape(v.name)}</td>
+                                <td>
+                                    ${v.teams && v.teams.length > 0 ? v.teams.map(team => {
+                                        let teamName = team.post_title;
+                                        let teamClassName = convertToClassName(teamName);
+                                        let teamColor = getTeamColor(teamName);
+                                        return `<span class="teamBadge ${teamClassName}" style="background-color:${teamColor}">${window.lodash.escape(teamName)}</span>`;
+                                    }).join('') : ''}
+                                </td>
                             </tr>`;
 
                         table.find('tbody').append(html);
@@ -331,12 +376,9 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
              * Fetch requested contact details
              */
             window.get_contact = (post_id) => {
-                console.log(post_id);
                 let comment_count = 2;
 
                 jQuery('.form-content-table').fadeOut('fast', function () {
-
-                    console.log(jsObject);
 
                     // Dispatch request call
                     jQuery.ajax({
@@ -377,6 +419,45 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
                                 `);
                             } else {
                                 jQuery('#form_content_name_tr').hide();
+                            }
+
+                            // Date of Birth
+                            if (window.is_field_enabled('date_of_birth')) {
+                                if (data['post']['date_of_birth']) {
+
+                                    let date_of_birth = data['post']['date_of_birth']['formatted'];
+
+                                    jQuery('#form_content_date_of_birth_td').html(date_of_birth);
+                                }
+                            } else {
+                                jQuery('#form_content_date_of_birth_tr').hide();
+                            }
+
+                            // Address
+                            if (window.is_field_enabled('contact_address')) {
+                                if (data['post']['contact_address']) {
+
+                                    let contact_address = [];
+                                    data['post']['contact_address'].forEach(address => {
+                                        contact_address.push(address['value']);
+                                    });
+
+                                    jQuery('#form_content_contact_address_td').html(contact_address.length > 0 ? contact_address.join('<br><br> ') : '');
+                                }
+                            } else {
+                                jQuery('#form_content_date_of_birth_tr').hide();
+                            }
+
+                            // NedenIsa Prayer Request
+                            if (window.is_field_enabled('nedenisa_prayer_request')) {
+                                if (data['post']['nedenisa_prayer_request']) {
+
+                                    let date_of_birth = data['post']['nedenisa_prayer_request'];
+
+                                    jQuery('#form_content_nedenisa_prayer_request_td').html(date_of_birth);
+                                }
+                            } else {
+                                jQuery('#form_content_nedenisa_prayer_request_tr').hide();
                             }
 
                             // MILESTONES
@@ -521,7 +602,6 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
                         }
                     });
                 }
-
                 return enabled;
             }
 
@@ -529,7 +609,6 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
              * Handle fetch request for contact details
              */
             window.get_assigned_contact_details = (post_id, post_name) => {
-                console.log('get_assigned_contact_details', post_id, post_name);
                 let contact_name = document.querySelector('#contact_name');
 
                 // Update contact name
@@ -543,6 +622,7 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
              * Adjust visuals, based on incoming sys_type
              */
             let assigned_contacts_div = jQuery('#assigned_contacts_div');
+
             switch (jsObject.sys_type) {
                 case 'post':
                     // Bypass contacts list and directly fetch requested contact details
@@ -691,7 +771,7 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
         <div id="wrapper">
             <div class="grid-x">
                 <div class="cell center">
-                    <h2 id="title"><b><?php esc_html_e( 'Updates Needed', 'disciple_tools' ) ?></b></h2>
+                    <h2 id="title"><b><?php esc_html_e( 'Your Teams Contacts', 'disciple_tools' ) ?></b></h2>
                 </div>
             </div>
             <hr>
@@ -742,6 +822,26 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
                                 <b><?php echo esc_attr( $field_settings['name']['name'] ); ?></b></td>
                             <td id="form_content_name_td"></td>
                         </tr>
+                        <tr id="form_content_date_of_birth_tr">
+                            <td style="vertical-align: top;">
+                                <b><?php echo esc_attr( $field_settings['date_of_birth']['name'] ); ?></b></td>
+                            <td id="form_content_date_of_birth_td"></td>
+                        </tr>
+                        <tr id="form_content_contact_address_tr">
+                            <td style="vertical-align: top;">
+                                <b><?php echo esc_attr( $field_settings['contact_address']['name'] ); ?></b></td>
+                            <td id="form_content_contact_address_td"></td>
+                        </tr>
+                        <tr id="form_content_contact_phone_tr">
+                            <td style="vertical-align: top;">
+                                <b><?php echo esc_attr( $field_settings['contact_phone']['name'] ); ?></b></td>
+                            <td id="form_content_contact_phone_td"></td>
+                        </tr>
+                        <tr id="form_content_nedenisa_prayer_request_tr">
+                            <td style="vertical-align: top;">
+                                <b><?php echo esc_attr( $field_settings['nedenisa_prayer_request']['name'] ); ?></b></td>
+                            <td id="form_content_nedenisa_prayer_request_td"></td>
+                        </td>
                         <tr id="form_content_milestones_tr">
                             <td style="vertical-align: top;">
                                 <b><?php echo esc_attr( $field_settings['milestones']['name'] ); ?></b></td>
@@ -756,11 +856,6 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
                             <td style="vertical-align: top;">
                                 <b><?php echo esc_attr( $field_settings['faith_status']['name'] ); ?></b></td>
                             <td id="form_content_faith_status_td"></td>
-                        </tr>
-                        <tr id="form_content_contact_phone_tr">
-                            <td style="vertical-align: top;">
-                                <b><?php echo esc_attr( $field_settings['contact_phone']['name'] ); ?></b></td>
-                            <td id="form_content_contact_phone_td"></td>
                         </tr>
                         <tr id="form_content_comments_tr">
                             <td style="vertical-align: top;">
@@ -797,7 +892,6 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
                     'callback' => [ $this, 'endpoint_get' ],
                     'permission_callback' => function( WP_REST_Request $request ){
                         $magic = new DT_Magic_URL( $this->root );
-                        dt_write_log($magic->verify_rest_endpoint_permissions_on_post( $request ));
                         return $magic->verify_rest_endpoint_permissions_on_post( $request );
                     },
                 ],
