@@ -45,49 +45,28 @@ class Disciple_Tools_Team_Module_Magic_Login_User_App extends DT_Magic_Url_Base 
          *                          If false, Dropdown option to be provided for user, team or group selection.
          *      - fields:       List of fields to be displayed within magic link frontend form.
          */
+        $contact_field_settings = DT_Posts::get_post_field_settings('contacts');
+
+        $fields = [
+            [
+                'id'    => 'comments',
+                'label' => __( 'Comments', 'disciple_tools' ) // Special Case!
+            ]
+        ];
+
+        foreach ($contact_field_settings as $key => $value) {
+            $fields[] = [
+                'id'    => $key,
+                'label' => $value['name']
+            ];
+        }
+
         $this->meta = [
             'app_type'      => 'magic_link',
             'post_type'     => $this->post_type,
             'contacts_only' => false,
             'supports_create' => true,
-            'fields'         => [
-                [
-                    'id'    => 'name',
-                    'label' => ''
-                ],
-                [
-                    'id'    => 'milestones',
-                    'label' => ''
-                ],
-                [
-                    'id'    => 'age',
-                    'label' => 'Age'
-                ],
-                [
-                    'id'    => 'seeker_path',
-                    'label' => 'Seeker Path'
-                ],
-                [
-                    'id'  => 'contact_address',
-                    'label' => 'Address'
-                ],
-                [
-                    'id'    => 'location',
-                    'label' => 'Location'
-                ],
-                [
-                    'id'    => 'faith_status',
-                    'label' => ''
-                ],
-                [
-                    'id'    => 'contact_phone',
-                    'label' => ''
-                ],
-                [
-                    'id'    => 'comments',
-                    'label' => __( 'Comments', 'disciple_tools' ) // Special Case!
-                ]
-            ],
+            'fields'         => $fields,
             'fields_refresh' => [
                 'enabled'    => true,
                 'post_type'  => 'contacts',
