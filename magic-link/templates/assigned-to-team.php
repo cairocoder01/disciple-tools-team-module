@@ -29,6 +29,112 @@ class Team_Assigned_List extends Disciple_Tools_Magic_Links_Template_Single_Reco
     protected $template_type = 'list-team-contacts';
     public $page_title = 'List Team Contacts';
     public $page_description = 'List Team Contacts Description';
+    public $teamColors = [];
+
+    public function header_style() {
+        ?>
+        <style>
+            body {
+                background-color: white;
+                padding: 1em;
+            }
+
+            #assigned_contacts_div {
+            }
+
+            .api-content-div-style {
+                height: 45dvh;
+                overflow-x: hidden;
+                overflow-y: scroll;
+                text-align: start;
+                border-bottom: 1px solid #cacaca;
+            }
+
+            .api-content-table thead {
+                border: none;
+                border-bottom: 1px solid #f1f1f1;
+            }
+            .api-content-table tbody {
+                border: none;
+            }
+
+            .api-content-table tr {
+                cursor: pointer;
+                background: #ffffff;
+                padding: 0px;
+            }
+
+            .api-content-table tr:hover {
+                background-color: #f5f5f5;
+            }
+
+            .teamBadgeContainer {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5em;
+            }
+
+            .teamBadge {
+                background-color: #7899;
+                color: #f5f5f5;
+                border-radius: 5px;
+                padding: 0.2em .5em;
+                font-size: .95rem;
+            }
+        </style>
+        <?php
+    }
+
+    public function convertToClassName($str) {
+        // Convert the string to lowercase
+        $str = strtolower($str);
+
+        // Replace non-alphanumeric characters with hyphens
+        $str = preg_replace('/[^a-z0-9]+/', '-', $str);
+
+        // Remove leading and trailing hyphens
+        $str = preg_replace('/^-+|-+$/', '', $str);
+
+        return $str;
+    }
+
+    public function stringToColor($str) {
+        $hash = 0;
+        for ($i = 0; $i < strlen($str); $i++) {
+            $hash = ord($str[$i]) + (int)(($hash << 5) - $hash);
+        }
+        $color = '#';
+        for ($i = 0; $i < 3; $i++) {
+            $value = ($hash >> ($i * 8)) & 0xFF;
+            if ($i === 3) { // Increase the blue component
+                $value = min($value - 100, 255); // Ensure it doesn't exceed 255
+            } elseif ($i === 2) { // Increase the blue component
+                $value = min($value + 100, 255); // Ensure it doesn't exceed 255
+            } else {
+                $value = max($value - 50, 0); // Decrease red and green components
+            }
+            $color .= substr('00' . dechex($value), -2);
+        }
+
+        // Calculate luminance
+        $r = hexdec(substr($color, 1, 2)) / 255;
+        $g = hexdec(substr($color, 3, 2)) / 255;
+        $b = hexdec(substr($color, 5, 2)) / 255;
+        $luminance = 0.2126 * $r + 0.7152 * $g + 0.0722 * $b;
+
+        // Determine contrasting text color
+        $textColor = $luminance > 0.6 ? '#333333' : '#f5f5f5';
+
+        return ['backgroundColor' => $color, 'textColor' => $textColor];
+    }
+
+    public function getTeamColor($teamName) {
+        global $teamColors;
+        if (!isset($teamColors[$teamName])) {
+            $teamColors[$teamName] = $this->stringToColor($teamName);
+        }
+        return $teamColors[$teamName];
+    }
 
     public function get_users_team_contacts() {
         // Get all teams assigned to the contact and sends the team ids to get_team_contacts
@@ -78,8 +184,6 @@ class Team_Assigned_List extends Disciple_Tools_Magic_Links_Template_Single_Reco
     }
     public function body() {
         $has_title = ! empty( $this->template ) && ( isset( $this->template['title'] ) && ! empty( $this->template['title'] ) );
-
-        dt_write_log($this);
         ?>
         <div id="custom-style"></div>
         <div id="wrapper">
@@ -118,7 +222,6 @@ class Team_Assigned_List extends Disciple_Tools_Magic_Links_Template_Single_Reco
                 <?php
                 // Determine if template type list of assigned contacts is to be displayed.
                 if ( isset( $this->template['type'] ) && ( $this->template['type'] == 'list-team-contacts' ) && !empty( $this->post ) ){
-                    dt_write_log($this->parts);
                     if ( isset( $this->parts ) && (isset ( $this->parts['post_type'] )) && $this->parts['post_type'] === 'contacts' ){
                         // This Magic Link is from a Contact so we will get all teams assigned to that contact then get all contacts assigned to those teams
                         $assigned_posts = $this->get_users_team_contacts();
@@ -139,12 +242,30 @@ class Team_Assigned_List extends Disciple_Tools_Magic_Links_Template_Single_Reco
                             <hr>
                             <div class="grid-x api-content-div-style" id="api-content">
                                 <table class="api-content-table">
+                                    <thead>
+                                        <th><?php esc_html_e( 'Name', 'disciple_tools' ) ?></th>
+                                        <th><?php esc_html_e( 'Teams', 'disciple_tools' ) ?>
+                                        <th><?php esc_html_e( 'Creation Date', 'disciple_tools' ) ?></th>
+                                    </thead>
                                     <tbody>
                                     <?php
                                     foreach ( $assigned_posts as $assigned ){
                                         ?>
                                         <tr onclick="get_assigned_details('<?php echo esc_html( $assigned['post_type'] ); ?>','<?php echo esc_html( $assigned['ID'] ); ?>','<?php echo esc_html( str_replace( "'", '&apos;', $assigned['name'] ) ); ?>')">
                                             <td><?php echo esc_html( $assigned['name'] ) ?></td>
+                                            <td class="teamBadgeContainer"><?php
+                                                if ( isset( $assigned['teams'] ) && count( $assigned['teams'] ) > 0 ){
+                                                    foreach ( $assigned['teams'] as $team ){
+                                                        $teamName = $team['post_title'];
+                                                        $teamClassName = $this->convertToClassName($teamName);
+                                                        $teamColors = $this->getTeamColor($teamName);
+                                                        $teamBackgroundColor = $teamColors['backgroundColor'];
+                                                        $teamTextColor = $teamColors['textColor'];
+                                                        echo '<span class="teamBadge ' . $teamClassName . '" style="background-color:' . $teamBackgroundColor . '; color:' . $teamTextColor . '">' . $teamName . '</span>';
+                                                    }
+                                                }
+                                            ?></td>
+                                            <td><?php echo esc_html( $assigned['post_date']['formatted'] ) ?></td>
                                         </tr>
                                         <?php
                                     }
