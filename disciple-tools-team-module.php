@@ -105,7 +105,7 @@ class Disciple_Tools_Team_Module {
          * @todo Decide if you want to create a magic link
          * To remove: delete the line below and remove the folder named /magic-link
          */
-        require_once( 'magic-link/magic-link-teams-contact-app.php' );
+        require_once( 'magic-link/templates/assigned-to-team.php' );
 
 
         /**
