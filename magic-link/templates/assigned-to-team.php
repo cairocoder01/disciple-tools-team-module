@@ -30,6 +30,7 @@ class Team_Assigned_List extends Disciple_Tools_Magic_Links_Template_Single_Reco
     protected $template_type = 'list-team-contacts';
     public $page_title = 'List Team Contacts';
     public $page_description = 'List Team Contacts Description';
+    public $root = 'team';
     public $teamColors = [];
 
     public function header_style() {
@@ -166,8 +167,9 @@ class Team_Assigned_List extends Disciple_Tools_Magic_Links_Template_Single_Reco
 
         if (is_array($team_contacts)) {
             foreach ($team_contacts as $contact_id) {
-                $post = DT_Posts::get_post('contacts', $contact_id, false);
-                if ($post) {
+                $post = DT_Posts::get_post('contacts', $contact_id, true, false, false);
+
+                if ($post && $post['overall_status']['key'] !== 'closed') {
                     $assigned_posts[] = $post; // Append each post to the array
                     $comments[] = DT_Posts::get_post_comments( 'contacts', $contact_id, false, 'all', [ 'number' => $this->template['show_recent_comments'] ] );
                 }
