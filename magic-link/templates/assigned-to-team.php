@@ -8,10 +8,11 @@ add_filter('dt_magic_link_template_types', function( $types ) {
         'value' => 'list-team-contacts',
         'text' => 'List Team Contacts',
     ];
-    $types['teams'][] = [
-        'value' => 'list-team-contacts',
-        'text' => 'List Team Contacts',
-    ];
+    // This is commented out until we update the magic link plugins supports connected post types
+    // $types['teams'][] = [
+    //     'value' => 'list-team-contacts',
+    //     'text' => 'List Team Contacts',
+    // ];
     return $types;
 });
 
