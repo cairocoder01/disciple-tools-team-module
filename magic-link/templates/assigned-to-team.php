@@ -17,7 +17,7 @@ add_filter('dt_magic_link_template_types', function( $types ) {
 
 add_action('dt_magic_link_template_load', function ( $template ) {
     if ( !empty( $template ) && $template['type'] === 'list-team-contacts' ) {
-        new Disciple_Tools_Magic_Links_Template_List_Sub_Assigned( $template );
+        new Team_Assigned_List( $template );
     }
 } );
 
@@ -30,8 +30,56 @@ class Team_Assigned_List extends Disciple_Tools_Magic_Links_Template_Single_Reco
     public $page_title = 'List Team Contacts';
     public $page_description = 'List Team Contacts Description';
 
+    public function get_users_team_contacts() {
+        // Get all teams assigned to the contact and sends the team ids to get_team_contacts
+        $contact_id = $this -> post['ID'];
+
+        $connections = p2p_get_connections( 'teams_to_contacts', [
+            'from' => $contact_id,
+        ]);
+
+        $team_ids = array_map( function ( $connection ) {
+            return $connection->p2p_to;
+        }, $connections );
+
+        return $this->get_team_contacts($team_ids);
+    }
+
+    public function get_team_contacts($team_ids) {
+        // Get all contacts assigned to the team
+        $team_connections = p2p_get_connections( 'contacts_to_teams', [
+            'from' => $team_ids,
+        ]);
+
+        $team_contacts = array_unique(array_map(function ($connection) {
+            return $connection->p2p_to;
+        }, $team_connections));
+
+        $assigned_posts = []; // Initialize as an array
+
+        if (is_array($team_contacts)) {
+            foreach ($team_contacts as $contact_id) {
+                $post = DT_Posts::get_post('contacts', $contact_id, false);
+                if ($post) {
+                    $assigned_posts[] = $post; // Append each post to the array
+                    $comments[] = DT_Posts::get_post_comments( 'contacts', $contact_id, false, 'all', [ 'number' => $this->template['show_recent_comments'] ] );
+                }
+            }
+        } else {
+            $assigned_posts = DT_Posts::get_post('contacts', $team_contacts, false);
+        }
+
+        $this->post = null;
+        if ( !empty( $assigned_posts ) ) {
+            $this->post = $assigned_posts[0];
+        }
+
+        return $assigned_posts;
+    }
     public function body() {
         $has_title = ! empty( $this->template ) && ( isset( $this->template['title'] ) && ! empty( $this->template['title'] ) );
+
+        dt_write_log($this);
         ?>
         <div id="custom-style"></div>
         <div id="wrapper">
@@ -70,48 +118,30 @@ class Team_Assigned_List extends Disciple_Tools_Magic_Links_Template_Single_Reco
                 <?php
                 // Determine if template type list of assigned contacts is to be displayed.
                 if ( isset( $this->template['type'] ) && ( $this->template['type'] == 'list-team-contacts' ) && !empty( $this->post ) ){
-
-                    // Build query fields.
-                    $query_fields = [
-                        'subassigned' => [ $this->post['ID'] ]
-                    ];
-
-                    if ( !empty( $this->post['corresponds_to_user'] ) ) {
-                        $query_fields['assigned_to'] = [ $this->post['corresponds_to_user'] ];
+                    dt_write_log($this->parts);
+                    if ( isset( $this->parts ) && (isset ( $this->parts['post_type'] )) && $this->parts['post_type'] === 'contacts' ){
+                        // This Magic Link is from a Contact so we will get all teams assigned to that contact then get all contacts assigned to those teams
+                        $assigned_posts = $this->get_users_team_contacts();
                     }
 
-                    // Fetch all assigned posts
-                    $assigned_posts = DT_Posts::list_posts( $this->post['post_type'], [
-                        'limit' => 1000,
-                        'fields' => [
-                            $query_fields
-                        ]
-                    ], false );
-
-                    // Add primary recipient post as first element.
-                    array_unshift( $assigned_posts['posts'], $this->post );
-
-                    $assigned_posts['posts'] = apply_filters( 'dt_smart_links_filter_assigned_posts', $assigned_posts['posts'], $this->template );
-
-                    $this->post = null;
-                    if ( !empty( $assigned_posts['posts'] ) ) {
-                        $this->post = $assigned_posts['posts'][0];
+                    if ( isset( $this->parts ) && (isset ( $this->parts['post_type'] )) && $this->parts['post_type'] === 'teams' ){
+                        // This Magic Link is from a Team not a contact so we will get all contacts assigned to that team
+                        $assigned_posts = $this->get_team_contacts($this->post['ID']);
                     }
-
                     // Display only if there are valid hits!
-                    if ( isset( $assigned_posts['posts'] ) && count( $assigned_posts['posts'] ) > 0 ){
+                    if ( isset( $assigned_posts ) && count( $assigned_posts ) > 0 ){
                         ?>
                         <!-- List Team Contacts -->
                         <div id="assigned_contacts_div">
                             <h3><?php esc_html_e( 'Subassigned', 'disciple_tools' ) ?> [ <span
-                                    id="total"><?php echo esc_html( count( $assigned_posts['posts'] ) ); ?></span>
+                                    id="total"><?php echo esc_html( count( $assigned_posts ) ); ?></span>
                                 ]</h3>
                             <hr>
                             <div class="grid-x api-content-div-style" id="api-content">
                                 <table class="api-content-table">
                                     <tbody>
                                     <?php
-                                    foreach ( $assigned_posts['posts'] as $assigned ){
+                                    foreach ( $assigned_posts as $assigned ){
                                         ?>
                                         <tr onclick="get_assigned_details('<?php echo esc_html( $assigned['post_type'] ); ?>','<?php echo esc_html( $assigned['ID'] ); ?>','<?php echo esc_html( str_replace( "'", '&apos;', $assigned['name'] ) ); ?>')">
                                             <td><?php echo esc_html( $assigned['name'] ) ?></td>

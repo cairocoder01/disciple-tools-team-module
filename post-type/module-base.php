@@ -231,6 +231,10 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
         if ( $post_type === $this->post_type ){
             $tiles['members'] = [ 'label' => __( 'Members', 'disciple-tools-team-module' ) ];
             $tiles['other'] = [ 'label' => __( 'Other', 'disciple-tools-team-module' ) ];
+            $tiles['apps'] = [
+                'label' => __( 'Magic Links', 'disciple_tools' ),
+                'description' => __( 'Magic Links available on this record.', 'disciple_tools' )
+            ];
         }
         return $tiles;
     }
