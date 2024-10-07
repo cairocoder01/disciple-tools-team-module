@@ -150,6 +150,10 @@ class Team_Assigned_List extends Disciple_Tools_Magic_Links_Template_Single_Reco
             return $connection->p2p_to;
         }, $connections );
 
+        if (empty($team_ids)) {
+            return [];
+        }
+
         return $this->get_team_contacts($team_ids);
     }
 
@@ -239,7 +243,7 @@ class Team_Assigned_List extends Disciple_Tools_Magic_Links_Template_Single_Reco
                         ?>
                         <!-- List Team Contacts -->
                         <div id="assigned_contacts_div">
-                            <h3><?php esc_html_e( 'Subassigned', 'disciple_tools' ) ?> [ <span
+                            <h3><?php esc_html_e( 'Team Contacts', 'disciple_tools_bulk_magic_link_sender' ) ?> [ <span
                                     id="total"><?php echo esc_html( count( $assigned_posts ) ); ?></span>
                                 ]</h3>
                             <hr>
@@ -297,7 +301,9 @@ class Team_Assigned_List extends Disciple_Tools_Magic_Links_Template_Single_Reco
                 <!-- ERROR MESSAGES -->
                 <span id="error" style="color: red;"></span>
                 <br>
-
+                <?php if ( $assigned_posts === null || count( $assigned_posts ) === 0 ) { ?>
+                    <h3 id="no_results"><?php esc_html_e( 'You are not a member of a Team with contacts', 'disciple_tools_bulk_magic_link_sender' ) ?></h3>
+                <?php } else { ?>
                 <h3>
                     <span id="contact_name" style="font-weight: bold">
                         <?php echo esc_html( ! empty( $this->post ) ? $this->post['name'] : '---' ); ?>
@@ -443,6 +449,7 @@ class Team_Assigned_List extends Disciple_Tools_Magic_Links_Template_Single_Reco
                     <?php esc_html_e( 'Submit Update', 'disciple_tools' ) ?>
                     <span class="update-loading-spinner loading-spinner" style="height: 17px; width: 17px; vertical-align: text-bottom;"></span>
                 </button>
+            <?php } ?>
             </div>
         </div>
         <?php
