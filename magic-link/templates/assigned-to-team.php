@@ -3,11 +3,11 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 } // Exit if accessed directly.
 
-add_filter('dt_magic_link_template_types', function( $types ) {
-    $types['contacts'][] = [
+add_filter('dt_magic_link_template_types', function ( $types ) {
+    $types['contacts'][] = array(
         'value' => 'list-team-contacts',
         'text' => 'List Team Contacts',
-    ];
+    );
     // This is commented out until we update the magic link plugins supports connected post types
     // $types['teams'][] = [
     //     'value' => 'list-team-contacts',
@@ -31,7 +31,7 @@ class Team_Assigned_List extends Disciple_Tools_Magic_Links_Template_Single_Reco
     public $page_title = 'List Team Contacts';
     public $page_description = 'List Team Contacts Description';
     public $root = 'team';
-    public $teamColors = [];
+    public $team_colors = array();
 
 
     public function __construct( $template ) {
@@ -105,99 +105,100 @@ class Team_Assigned_List extends Disciple_Tools_Magic_Links_Template_Single_Reco
         <?php
     }
 
-    public function convertToClassName($str) {
+    public function convertToClassName( $str ) {
         // Convert the string to lowercase
-        $str = strtolower($str);
+        $str = strtolower( $str );
 
         // Replace non-alphanumeric characters with hyphens
-        $str = preg_replace('/[^a-z0-9]+/', '-', $str);
+        $str = preg_replace( '/[^a-z0-9]+/', '-', $str );
 
         // Remove leading and trailing hyphens
-        $str = preg_replace('/^-+|-+$/', '', $str);
+        $str = preg_replace( '/^-+|-+$/', '', $str );
 
         return $str;
     }
 
-    public function stringToColor($str) {
+    public function stringToColor( $str ) {
         $hash = 0;
-        for ($i = 0; $i < strlen($str); $i++) {
-            $hash = ord($str[$i]) + (int)(($hash << 5) - $hash);
+        $str_length = strlen( $str );
+        for ( $i = 0; $i < $str_length; $i++ ) {
+            $hash = ord( $str[$i] ) + (int) ( ( $hash << 5 ) - $hash );
         }
         $color = '#';
-        for ($i = 0; $i < 3; $i++) {
-            $value = ($hash >> ($i * 8)) & 0xFF;
-            if ($i === 3) { // Increase the blue component
-                $value = min($value - 100, 255); // Ensure it doesn't exceed 255
-            } elseif ($i === 2) { // Increase the blue component
-                $value = min($value + 100, 255); // Ensure it doesn't exceed 255
+        for ( $i = 0; $i < 3; $i++ ) {
+            $value = ( $hash >> ( $i * 8 ) ) & 0xFF;
+            if ( $i === 3 ) { // Increase the blue component
+                $value = min( $value - 100, 255 ); // Ensure it doesn't exceed 255
+            } elseif ( $i === 2 ) { // Increase the blue component
+                $value = min( $value + 100, 255 ); // Ensure it doesn't exceed 255
             } else {
-                $value = max($value - 50, 0); // Decrease red and green components
+                $value = max( $value - 50, 0 ); // Decrease red and green components
             }
-            $color .= substr('00' . dechex($value), -2);
+            $color .= substr( '00' . dechex( $value ), -2 );
         }
 
         // Calculate luminance
-        $r = hexdec(substr($color, 1, 2)) / 255;
-        $g = hexdec(substr($color, 3, 2)) / 255;
-        $b = hexdec(substr($color, 5, 2)) / 255;
+        $r = hexdec( substr( $color, 1, 2 ) ) / 255;
+        $g = hexdec( substr( $color, 3, 2 ) ) / 255;
+        $b = hexdec( substr( $color, 5, 2 ) ) / 255;
         $luminance = 0.2126 * $r + 0.7152 * $g + 0.0722 * $b;
 
         // Determine contrasting text color
-        $textColor = $luminance > 0.6 ? '#333333' : '#f5f5f5';
+        $text_color = $luminance > 0.6 ? '#333333' : '#f5f5f5';
 
-        return ['backgroundColor' => $color, 'textColor' => $textColor];
+        return array( 'backgroundColor' => $color, 'textColor' => $text_color );
     }
 
-    public function getTeamColor($teamName) {
-        global $teamColors;
-        if (!isset($teamColors[$teamName])) {
-            $teamColors[$teamName] = $this->stringToColor($teamName);
+    public function getTeamColor( $team_name ) {
+        global $team_colors;
+        if ( !isset( $team_colors[$team_name] ) ) {
+            $team_colors[$team_name] = $this->stringToColor( $team_name );
         }
-        return $teamColors[$teamName];
+        return $team_colors[$team_name];
     }
 
     public function get_users_team_contacts() {
         // Get all teams assigned to the contact and sends the team ids to get_team_contacts
-        $contact_id = $this -> post['ID'];
+        $contact_id = $this->post['ID'];
 
-        $connections = p2p_get_connections( 'teams_to_contacts', [
+        $connections = p2p_get_connections( 'teams_to_contacts', array(
             'from' => $contact_id,
-        ]);
+        ));
 
         $team_ids = array_map( function ( $connection ) {
             return $connection->p2p_to;
         }, $connections );
 
-        if (empty($team_ids)) {
-            return [];
+        if ( empty( $team_ids ) ) {
+            return array();
         }
 
-        return $this->get_team_contacts($team_ids);
+        return $this->get_team_contacts( $team_ids );
     }
 
-    public function get_team_contacts($team_ids) {
+    public function get_team_contacts( $team_ids ) {
         // Get all contacts assigned to the team
-        $team_connections = p2p_get_connections( 'contacts_to_teams', [
+        $team_connections = p2p_get_connections( 'contacts_to_teams', array(
             'from' => $team_ids,
-        ]);
+        ));
 
-        $team_contacts = array_unique(array_map(function ($connection) {
+        $team_contacts = array_unique(array_map(function ( $connection ) {
             return $connection->p2p_to;
         }, $team_connections));
 
-        $assigned_posts = []; // Initialize as an array
+        $assigned_posts = array(); // Initialize as an array
 
-        if (is_array($team_contacts)) {
-            foreach ($team_contacts as $contact_id) {
-                $post = DT_Posts::get_post('contacts', $contact_id, true, false, false);
+        if ( is_array( $team_contacts ) ) {
+            foreach ( $team_contacts as $contact_id ) {
+                $post = DT_Posts::get_post( 'contacts', $contact_id, true, false, false );
 
-                if ($post && $post['overall_status']['key'] !== 'closed') {
+                if ( $post && $post['overall_status']['key'] !== 'closed' ) {
                     $assigned_posts[] = $post; // Append each post to the array
-                    $comments[] = DT_Posts::get_post_comments( 'contacts', $contact_id, false, 'all', [ 'number' => $this->template['show_recent_comments'] ] );
+                    $comments[] = DT_Posts::get_post_comments( 'contacts', $contact_id, false, 'all', array( 'number' => $this->template['show_recent_comments'] ) );
                 }
             }
         } else {
-            $assigned_posts = DT_Posts::get_post('contacts', $team_contacts, false);
+            $assigned_posts = DT_Posts::get_post( 'contacts', $team_contacts, false );
         }
 
         $this->post = null;
@@ -247,14 +248,14 @@ class Team_Assigned_List extends Disciple_Tools_Magic_Links_Template_Single_Reco
                 <?php
                 // Determine if template type list of assigned contacts is to be displayed.
                 if ( isset( $this->template['type'] ) && ( $this->template['type'] == 'list-team-contacts' ) && !empty( $this->post ) ){
-                    if ( isset( $this->parts ) && (isset ( $this->parts['post_type'] )) && $this->parts['post_type'] === 'contacts' ){
+                    if ( isset( $this->parts ) && ( isset( $this->parts['post_type'] ) ) && $this->parts['post_type'] === 'contacts' ){
                         // This Magic Link is from a Contact so we will get all teams assigned to that contact then get all contacts assigned to those teams
                         $assigned_posts = $this->get_users_team_contacts();
                     }
 
-                    if ( isset( $this->parts ) && (isset ( $this->parts['post_type'] )) && $this->parts['post_type'] === 'teams' ){
+                    if ( isset( $this->parts ) && ( isset( $this->parts['post_type'] ) ) && $this->parts['post_type'] === 'teams' ){
                         // This Magic Link is from a Team not a contact so we will get all contacts assigned to that team
-                        $assigned_posts = $this->get_team_contacts($this->post['ID']);
+                        $assigned_posts = $this->get_team_contacts( $this->post['ID'] );
                     }
                     // Display only if there are valid hits!
                     if ( isset( $assigned_posts ) && count( $assigned_posts ) > 0 ){
@@ -279,16 +280,16 @@ class Team_Assigned_List extends Disciple_Tools_Magic_Links_Template_Single_Reco
                                         <tr onclick="get_assigned_details('<?php echo esc_html( $assigned['post_type'] ); ?>','<?php echo esc_html( $assigned['ID'] ); ?>','<?php echo esc_html( str_replace( "'", '&apos;', $assigned['name'] ) ); ?>')">
                                             <td><?php echo esc_html( $assigned['name'] ) ?></td>
                                             <td class="teamBadgeContainer"><?php
-                                                if ( isset( $assigned['teams'] ) && count( $assigned['teams'] ) > 0 ){
-                                                    foreach ( $assigned['teams'] as $team ){
-                                                        $teamName = $team['post_title'];
-                                                        $teamClassName = $this->convertToClassName($teamName);
-                                                        $teamColors = $this->getTeamColor($teamName);
-                                                        $teamBackgroundColor = $teamColors['backgroundColor'];
-                                                        $teamTextColor = $teamColors['textColor'];
-                                                        echo '<span class="teamBadge ' . $teamClassName . '" style="background-color:' . $teamBackgroundColor . '; color:' . $teamTextColor . '">' . $teamName . '</span>';
-                                                    }
+                                            if ( isset( $assigned['teams'] ) && count( $assigned['teams'] ) > 0 ){
+                                                foreach ( $assigned['teams'] as $team ){
+                                                    $team_name = $team['post_title'];
+                                                    $team_class_name = $this->convertToClassName( $team_name );
+                                                    $team_colors = $this->getTeamColor( $team_name );
+                                                    $team_background_color = $team_colors['backgroundColor'];
+                                                    $team_text_color = $team_colors['textColor'];
+                                                    echo '<span class="teamBadge ' . esc_attr( $team_class_name ) . '" style="background-color:' . esc_attr( $team_background_color ) . '; color:' . esc_attr( $team_text_color ) . '">' . esc_html( $team_name ) . '</span>';
                                                 }
+                                            }
                                             ?></td>
                                             <td><?php echo esc_html( $assigned['post_date']['formatted'] ) ?></td>
                                         </tr>
@@ -351,7 +352,7 @@ class Team_Assigned_List extends Disciple_Tools_Magic_Links_Template_Single_Reco
                         if ( ! empty( $this->post ) && ! empty( $this->post_field_settings ) && ! empty( $this->template ) ) {
 
                             // Display selected fields
-                            foreach ( $this->template['fields'] ?? [] as $field ) {
+                            foreach ( $this->template['fields'] ?? array() as $field ) {
                                 if ( $field['enabled'] && $this->is_link_obj_field_enabled( $field['id'] ) ) {
 
                                     $post_field_type = '';
@@ -362,7 +363,7 @@ class Team_Assigned_List extends Disciple_Tools_Magic_Links_Template_Single_Reco
                                         continue;
                                     }
                                     // Field types to be supported.
-                                    if ( $field['type'] === 'dt' && ! in_array( $post_field_type, [
+                                    if ( $field['type'] === 'dt' && ! in_array( $post_field_type, array(
                                             'text',
                                             'textarea',
                                             'date',
@@ -373,8 +374,8 @@ class Team_Assigned_List extends Disciple_Tools_Magic_Links_Template_Single_Reco
                                             'link',
                                             'communication_channel',
                                             'location',
-                                            'location_meta'
-                                    ] ) ) {
+                                            'location_meta',
+                                    ) ) ) {
                                         continue;
                                     }
 
@@ -439,8 +440,8 @@ class Team_Assigned_List extends Disciple_Tools_Magic_Links_Template_Single_Reco
                             // If requested, display recent comments
                             if ( $this->template['show_recent_comments'] ) {
                                 $comment_count = is_bool( $this->template['show_recent_comments'] ) ? 2 : intval( $this->template['show_recent_comments'] );
-                                $recent_comments = DT_Posts::get_post_comments( $this->post['post_type'], $this->post['ID'], false, 'all', [ 'number' => $comment_count ] );
-                                foreach ( $recent_comments['comments'] ?? [] as $comment ) {
+                                $recent_comments = DT_Posts::get_post_comments( $this->post['post_type'], $this->post['ID'], false, 'all', array( 'number' => $comment_count ) );
+                                foreach ( $recent_comments['comments'] ?? array() as $comment ) {
                                     ?>
                                     <tr class="dt-comment-tr">
                                         <td>

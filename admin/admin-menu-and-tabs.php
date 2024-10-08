@@ -48,7 +48,7 @@ class Disciple_Tools_Team_Module_Menu {
     public function register_menu() {
         $this->page_title = __( 'Team Module', 'disciple-tools-team-module' );
 
-        add_submenu_page( 'dt_extensions', $this->page_title, $this->page_title, 'manage_dt', $this->token, [ $this, 'content' ] );
+        add_submenu_page( 'dt_extensions', $this->page_title, $this->page_title, 'manage_dt', $this->token, array( $this, 'content' ) );
     }
 
     /**
