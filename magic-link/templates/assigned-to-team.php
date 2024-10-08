@@ -33,6 +33,24 @@ class Team_Assigned_List extends Disciple_Tools_Magic_Links_Template_Single_Reco
     public $root = 'team';
     public $teamColors = [];
 
+
+    public function __construct( $template ) {
+        parent::__construct( $template );
+        $post = $this -> post;
+        if ( empty( $post ) ) {
+            return;
+        }
+        $contact_id = $post['ID'];
+
+        $user_id = get_post_meta( $contact_id, 'corresponds_to_user', true );
+
+        $user_locale = get_user_locale( $user_id );
+
+        // Attempt to switch to the user's locale
+        dt_switch_locale_for_notifications( $user_id, $user_locale );
+
+    }
+
     public function header_style() {
         ?>
         <style>
