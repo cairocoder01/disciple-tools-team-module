@@ -243,7 +243,7 @@ class Team_Assigned_List extends Disciple_Tools_Magic_Links_Template_Single_Reco
                         ?>
                         <!-- List Team Contacts -->
                         <div id="assigned_contacts_div">
-                            <h3><?php esc_html_e( 'Team Contacts', 'disciple_tools_bulk_magic_link_sender' ) ?> [ <span
+                            <h3><?php esc_html_e( 'Team Contacts', 'disciple-tools-team-module' ) ?> [ <span
                                     id="total"><?php echo esc_html( count( $assigned_posts ) ); ?></span>
                                 ]</h3>
                             <hr>
@@ -251,7 +251,7 @@ class Team_Assigned_List extends Disciple_Tools_Magic_Links_Template_Single_Reco
                                 <table class="api-content-table">
                                     <thead>
                                         <th><?php esc_html_e( 'Name', 'disciple_tools' ) ?></th>
-                                        <th><?php esc_html_e( 'Teams', 'disciple_tools' ) ?>
+                                        <th><?php esc_html_e( 'Teams', 'disciple-tools-team-module' ) ?>
                                         <th><?php esc_html_e( 'Creation Date', 'disciple_tools' ) ?></th>
                                     </thead>
                                     <tbody>
@@ -302,7 +302,7 @@ class Team_Assigned_List extends Disciple_Tools_Magic_Links_Template_Single_Reco
                 <span id="error" style="color: red;"></span>
                 <br>
                 <?php if ( $assigned_posts === null || count( $assigned_posts ) === 0 ) { ?>
-                    <h3 id="no_results"><?php esc_html_e( 'You are not a member of a Team with contacts', 'disciple_tools_bulk_magic_link_sender' ) ?></h3>
+                    <h3 id="no_results"><?php esc_html_e( 'You are not a member of a Team with contacts', 'disciple-tools-team-module' ) ?></h3>
                 <?php } else { ?>
                 <h3>
                     <span id="contact_name" style="font-weight: bold">
