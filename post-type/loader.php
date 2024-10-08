@@ -12,19 +12,19 @@ if ( ! class_exists( 'DT_Module_Base' ) ) {
 /**
  * Add any modules required or added for the post type
  */
-add_filter( 'dt_post_type_modules', function( $modules ){
+add_filter( 'dt_post_type_modules', function ( $modules ) {
 
     /**
      * @todo Update the starter in the array below 'starter_base'. Follow the pattern.
      * @todo Add more modules by adding a new array element. i.e. 'starter_base_two'.
      */
-    $modules['team'] = [
+    $modules['team'] = array(
         'name' => __( 'Team Module', 'disciple-tools-team-module' ),
         'enabled' => true,
-        'prerequisites' => [ 'contacts_base' ],
+        'prerequisites' => array( 'contacts_base' ),
         'post_type' => 'teams',
-        'description' => __( 'Teams functionality', 'disciple-tools-team-module' )
-    ];
+        'description' => __( 'Teams functionality', 'disciple-tools-team-module' ),
+    );
 
     return $modules;
 }, 20, 1 );

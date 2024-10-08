@@ -34,24 +34,23 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
         }
 
         //setup post type
-        add_action( 'after_setup_theme', [ $this, 'after_setup_theme' ], 100 );
-        add_filter( 'dt_set_roles_and_permissions', [ $this, 'dt_set_roles_and_permissions' ], 25, 1 ); //after contacts
+        add_action( 'after_setup_theme', array( $this, 'after_setup_theme' ), 100 );
+        add_filter( 'dt_set_roles_and_permissions', array( $this, 'dt_set_roles_and_permissions' ), 25, 1 ); //after contacts
 
         //setup tiles and fields
-        add_filter( 'dt_custom_fields_settings', [ $this, 'dt_custom_fields_settings' ], 10, 2 );
-        add_filter( 'dt_details_additional_tiles', [ $this, 'dt_details_additional_tiles' ], 10, 2 );
-        add_action( 'wp_enqueue_scripts', [ $this, 'scripts' ], 99 );
-        add_filter( 'dt_get_post_type_settings', [ $this, 'dt_get_post_type_settings' ], 20, 2 );
+        add_filter( 'dt_custom_fields_settings', array( $this, 'dt_custom_fields_settings' ), 10, 2 );
+        add_filter( 'dt_details_additional_tiles', array( $this, 'dt_details_additional_tiles' ), 10, 2 );
+        add_action( 'wp_enqueue_scripts', array( $this, 'scripts' ), 99 );
+        add_filter( 'dt_get_post_type_settings', array( $this, 'dt_get_post_type_settings' ), 20, 2 );
 
-        add_filter( 'dt_post_create_fields', [ $this, 'dt_post_create_fields' ], 50, 2 );
+        add_filter( 'dt_post_create_fields', array( $this, 'dt_post_create_fields' ), 50, 2 );
 
         //list
-        add_filter( 'dt_user_list_filters', [ $this, 'dt_user_list_filters' ], 100, 2 );
-        add_filter( 'dt_filter_access_permissions', [ $this, 'dt_filter_access_permissions' ], 20, 2 );
-        add_filter( 'dt_can_view_permission', [ $this, 'can_view_permission_filter' ], 10, 3 );
-        add_filter( 'dt_can_update_permission', [ $this, 'dt_can_update_permission' ], 20, 3 );
-        add_filter( 'dt_get_viewable_compact', [ $this, 'dt_filter_get_viewable_compact' ], 20, 4 );
-
+        add_filter( 'dt_user_list_filters', array( $this, 'dt_user_list_filters' ), 100, 2 );
+        add_filter( 'dt_filter_access_permissions', array( $this, 'dt_filter_access_permissions' ), 20, 2 );
+        add_filter( 'dt_can_view_permission', array( $this, 'can_view_permission_filter' ), 10, 3 );
+        add_filter( 'dt_can_update_permission', array( $this, 'dt_can_update_permission' ), 20, 3 );
+        add_filter( 'dt_get_viewable_compact', array( $this, 'dt_filter_get_viewable_compact' ), 20, 4 );
     }
 
     public function after_setup_theme(){
@@ -86,7 +85,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
         $multiplier_permissions = Disciple_Tools_Roles::default_multiplier_caps(); // get the base multiplier permissions
 
 
-        $base_team_member_permissions = wp_parse_args( [
+        $base_team_member_permissions = wp_parse_args( array(
             'dt_list_users' => true,
             'access_specific_teams' => true, //give user permission to all posts their team(s) are assigned to
             'assign_any_contacts' => true, //assign contacts to others,
@@ -94,10 +93,10 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
             'create_trainings' => true,
             'update_trainings' => true,
             'list_all_teams' => true,
-        ], $multiplier_permissions );
+        ), $multiplier_permissions );
 
 
-        $general_all_teams_permissions = wp_parse_args( [
+        $general_all_teams_permissions = wp_parse_args( array(
             'dt_all_access_contacts' => true, //view and update all access contacts
 
             'view_any_groups' => true,
@@ -105,52 +104,52 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
 
             'view_any_trainings' => true,
             'update_any_trainings' => true,
-        ], $base_team_member_permissions );
+        ), $base_team_member_permissions );
 
         if ( !isset( $expected_roles['team_member'] ) ){
-            $expected_roles['team_member'] = [
+            $expected_roles['team_member'] = array(
                 'label' => __( 'Team Member', 'disciple-tools-team-module' ),
                 'description' => 'Interacts with Contacts, Groups, etc., for a given team',
                 'permissions' => $base_team_member_permissions,
-            ];
+            );
         }
 
         if ( !isset( $expected_roles['team_collaborator'] ) ){
-            $expected_roles['team_collaborator'] = [
+            $expected_roles['team_collaborator'] = array(
                 'label' => __( 'Team Collaborator', 'disciple-tools-team-module' ),
                 'description' => 'Access to all Contacts, Groups, etc. for all teams',
-                'permissions' => wp_parse_args( [], $general_all_teams_permissions ),
-                'order' => 20
-            ];
+                'permissions' => wp_parse_args( array(), $general_all_teams_permissions ),
+                'order' => 20,
+            );
         }
 
         if ( !isset( $expected_roles['team_leader'] ) ){
-            $expected_roles['team_leader'] = [
+            $expected_roles['team_leader'] = array(
                 'label' => __( 'Team Leader', 'disciple-tools-team-module' ),
                 'description' => 'Access to all Contacts, Groups, etc. for all teams and access to update their team',
-                'permissions' => wp_parse_args( [
+                'permissions' => wp_parse_args( array(
                     'access_teams' => true,
                     'view_any_teams' => true,
                     'update_my_teams' => true,
-                ], $general_all_teams_permissions ),
-                'order' => 20
-            ];
+                ), $general_all_teams_permissions ),
+                'order' => 20,
+            );
         }
 
         if ( !isset( $expected_roles['teams_admin'] ) ) {
-            $expected_roles['teams_admin'] = [
+            $expected_roles['teams_admin'] = array(
                 'label' => __( 'Teams Admin', 'disciple-tools-team-module' ),
                 'description' => 'Admin access to all teams',
-                'permissions' => wp_parse_args( [
+                'permissions' => wp_parse_args( array(
                     'view_project_metrics' => true,
 
                     'access_teams' => true,
                     'create_teams' => true,
                     'view_any_teams' => true,
                     'update_any_teams' => true,
-                ], $general_all_teams_permissions ),
-                'order' => 20
-            ];
+                ), $general_all_teams_permissions ),
+                'order' => 20,
+            );
         }
 
 
@@ -179,7 +178,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
     public function dt_custom_fields_settings( $fields, $post_type ){
         if ( $post_type === $this->post_type ) {
             // can this filter to just user contacts? (doesn't seem like it)
-            $fields['members'] = [
+            $fields['members'] = array(
                 'name' => __( 'Members', 'disciple-tools-team-module' ),
                 'description' => __( 'Which contacts are members of this team.', 'disciple-tools-team-module' ),
                 'type' => 'connection',
@@ -188,11 +187,11 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                 'p2p_key' => $this->post_type.'_to_contacts',
                 'tile' => 'members',
                 'icon' => plugin_dir_url( __FILE__ ) . '../assets/team.svg',
-                'show_in_table' => 35
-            ];
+                'show_in_table' => 35,
+            );
         } else {
             // add a teams field to all post types
-            $fields['teams'] = [
+            $fields['teams'] = array(
                 'name' => __( 'Teams', 'disciple-tools-team-module' ),
                 'description' => __( 'Which teams interact with and have access to this.', 'disciple-tools-team-module' ),
                 'type' => 'connection',
@@ -201,13 +200,13 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                 'p2p_key' => $post_type.'_to_'.$this->post_type,
                 'tile' => 'status',
                 'icon' => plugin_dir_url( __FILE__ ) . '../assets/team.svg',
-                'show_in_table' => 17
-            ];
+                'show_in_table' => 17,
+            );
         }
 
         // Connection to mark a contact/user as a member of a team
         if ( $post_type === 'contacts' ){
-            $fields['member_' .$this->post_type] = [
+            $fields['member_' .$this->post_type] = array(
                 'name' => __( 'Member of Teams', 'disciple-tools-team-module' ),
                 'description' => '',
                 'type' => 'connection',
@@ -216,8 +215,8 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                 'p2p_key' => $this->post_type.'_to_contacts',
                 'tile' => 'other',
                 'icon' => plugin_dir_url( __FILE__ ) . '../assets/team.svg',
-                'show_in_table' => 35
-            ];
+                'show_in_table' => 35,
+            );
         }
 
         return $fields;
@@ -229,12 +228,12 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
      */
     public function dt_details_additional_tiles( $tiles, $post_type = '' ){
         if ( $post_type === $this->post_type ){
-            $tiles['members'] = [ 'label' => __( 'Members', 'disciple-tools-team-module' ) ];
-            $tiles['other'] = [ 'label' => __( 'Other', 'disciple-tools-team-module' ) ];
-            $tiles['apps'] = [
+            $tiles['members'] = array( 'label' => __( 'Members', 'disciple-tools-team-module' ) );
+            $tiles['other'] = array( 'label' => __( 'Other', 'disciple-tools-team-module' ) );
+            $tiles['apps'] = array(
                 'label' => __( 'Magic Links', 'disciple_tools' ),
-                'description' => __( 'Magic Links available on this record.', 'disciple_tools' )
-            ];
+                'description' => __( 'Magic Links available on this record.', 'disciple_tools' ),
+            );
         }
         return $tiles;
     }
@@ -249,12 +248,12 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
 
     private static function get_user_teams() {
         // get contact connected with current user
-        $contact_id = get_user_option( 'corresponds_to_contact', get_current_user_id() ) ?: [];
+        $contact_id = get_user_option( 'corresponds_to_contact', get_current_user_id() ) ?: array();
 
         // get all teams this user is a member of
-        $connections = p2p_get_connections( 'teams_to_contacts', [
+        $connections = p2p_get_connections( 'teams_to_contacts', array(
             'from' => $contact_id,
-        ]);
+        ));
 
         $team_ids = array_map( function ( $connection ) {
             return $connection->p2p_to;
@@ -316,20 +315,20 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
             if ( $post_type !== 'contacts' ) {
                 $has_all_tab = array_search( 'all', array_column( $filters['tabs'], 'key' ) ) > -1;
                 if ( !$has_all_tab ) {
-                    $filters['tabs'][] = [
+                    $filters['tabs'][] = array(
                         'key' => 'all',
                         'label' => __( 'Default Filters', 'disciple_tools' ),
-                        'order' => 10
-                    ];
+                        'order' => 10,
+                    );
                     // add assigned to me filters
-                    $filters['filters'][] = [
+                    $filters['filters'][] = array(
                         'ID' => 'all',
                         'tab' => 'all',
                         'name' => _x( 'All', 'All records', 'disciple_tools' ),
-                        'query' => [
+                        'query' => array(
                             'sort' => '-post_date',
-                        ],
-                    ];
+                        ),
+                    );
                 }
             }
             $user_team_ids = self::get_user_teams();
@@ -337,24 +336,24 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
             $total_my = self::get_my_teams_count( $post_type );
             $counts = self::get_all_team_counts( $post_type );
 
-            $team_counts = [];
+            $team_counts = array();
             foreach ( $counts as $count ){
-                $team_counts[$count['team_id']] = [
+                $team_counts[$count['team_id']] = array(
                     'name' => $count['post_title'],
-                    'count' => $count['count']
-                ];
+                    'count' => $count['count'],
+                );
             }
 
             // add assigned to team filters
-            $filters['filters'][] = [
+            $filters['filters'][] = array(
                 'ID' => 'my_team',
                 'tab' => $tab,
                 'name' => __( 'Team', 'disciple-tools-team-module' ),
-                'query' => [
+                'query' => array(
                     'teams' => $user_team_ids,
-                ],
+                ),
                 'count' => $total_my ?: null,
-            ];
+            );
 
             $can_view_single = current_user_can( 'access_specific_teams' ) && count( $user_team_ids ) === 1;
             $can_view_any = current_user_can( 'view_any_' . $post_type ) || current_user_can( 'dt_all_access_' . $post_type );
@@ -364,16 +363,16 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                     $can_view_team = $can_view_any || array_search( $team_id, $user_team_ids ) > -1;
 
                     if ( $can_view_team ) {
-                        $filters['filters'][] = [
+                        $filters['filters'][] = array(
                             'ID' => 'team_' . $team_id,
                             'tab' => $tab,
                             'name' => $team_count['name'],
-                            'query' => [
-                                'teams' => [ $team_id ],
-                            ],
+                            'query' => array(
+                                'teams' => array( $team_id ),
+                            ),
                             'count' => $team_count['count'],
-                            'subfilter' => true
-                        ];
+                            'subfilter' => true,
+                        );
                     }
                 }
             }
@@ -385,7 +384,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
     public static function dt_filter_access_permissions( $permissions, $post_type ){
         if ( $post_type === self::post_type() ){
             if ( DT_Posts::can_view_all( $post_type ) ){
-                $permissions = [];
+                $permissions = array();
             }
 
             // if has permission access_specific_teams and user.teams matches
@@ -394,7 +393,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
             if ( !current_user_can( "view_any_$post_type" ) && current_user_can( 'access_specific_teams' ) ) {
                 $team_ids = self::get_user_teams();
                 if ( !empty( $team_ids ) ){
-                    $permissions[] = [ 'teams' => $team_ids ];
+                    $permissions[] = array( 'teams' => $team_ids );
                 }
             }
         }
@@ -409,7 +408,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
      */
     public static function can_view_update_post( $has_permission, $post_id ) {
         if ( !$has_permission ) {
-            $contact_id = get_user_option( 'corresponds_to_contact', get_current_user_id() ) ?: [];
+            $contact_id = get_user_option( 'corresponds_to_contact', get_current_user_id() ) ?: array();
 
             // Get all posts that the user's teams are assigned to
             global $wpdb;
@@ -449,11 +448,9 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                 // dt_write_log( 'can_update: ' . json_encode( $post_id ) . ' | ' . json_encode( $user_teams ) );
                 $has_permission = array_search( $post_id, $user_teams, false ) > -1;
             }
-        } else {
-            if ( current_user_can( 'access_specific_teams' ) ) {
+        } elseif ( current_user_can( 'access_specific_teams' ) ) {
                 //give user permission to all posts their team(s) are assigned to
                 $has_permission = self::can_view_update_post( $has_permission, $post_id );
-            }
         }
         return $has_permission;
     }
@@ -461,23 +458,23 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
     public static function dt_filter_get_viewable_compact( $result, $post_type, $search_string, $args ) {
         // Allow all users to see
         if ( $post_type === 'teams' ) {
-            $result = DT_Posts::list_posts( $post_type, [], false );
-            $compact = [];
+            $result = DT_Posts::list_posts( $post_type, array(), false );
+            $compact = array();
             //filter out users if requested.
             foreach ( $result['posts'] as $post ) {
                 if ( isset( $args['include-users'] ) && $args['include-users'] === 'false' && $post->corresponds_to_user >= 1 ) {
                     continue;
                 }
-                $compact[] = [
+                $compact[] = array(
                     'ID' => $post['ID'],
-                    'name' => wp_specialchars_decode( $post['post_title'] )
-                ];
+                    'name' => wp_specialchars_decode( $post['post_title'] ),
+                );
             }
-            return [
+            return array(
                 'total' => $result['total'],
                 'raw' => $compact,
                 'posts' => DT_Posts::capture_viewable_compact_post_record_status( $post_type, array_slice( $compact, 0, 50 ) ),
-            ];
+            );
         }
         return $result;
     }
@@ -489,5 +486,3 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
         }
     }
 }
-
-
