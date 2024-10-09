@@ -62,18 +62,17 @@ function disciple_tools_team_module() {
     }
 
     return Disciple_Tools_Team_Module::instance();
-
 }
 add_action( 'after_setup_theme', 'disciple_tools_team_module', 20 );
 
 //register the D.T Plugin
-add_filter( 'dt_plugins', function ( $plugins ){
-    $plugin_data = get_file_data( __FILE__, [ 'Version' => 'Version', 'Plugin Name' => 'Plugin Name' ], false );
-    $plugins['disciple-tools-team-module'] = [
+add_filter( 'dt_plugins', function ( $plugins ) {
+    $plugin_data = get_file_data( __FILE__, array( 'Version' => 'Version', 'Plugin Name' => 'Plugin Name' ), false );
+    $plugins['disciple-tools-team-module'] = array(
         'plugin_url' => trailingslashit( plugin_dir_url( __FILE__ ) ),
         'version' => $plugin_data['Version'] ?? null,
         'name' => $plugin_data['Plugin Name'] ?? null,
-    ];
+    );
     return $plugins;
 });
 
@@ -99,14 +98,23 @@ class Disciple_Tools_Team_Module {
          * @todo Decide if you want to create a new post type
          * To remove: delete the line below and remove the folder named /post-type
          */
-        require_once( 'post-type/loader.php' ); // add starter post type extension to Disciple.Tools system
+        require_once 'post-type/loader.php'; // add starter post type extension to Disciple.Tools system
+
+        /**
+         * @todo Decide if you want to create a magic link
+         * To remove: delete the line below and remove the folder named /magic-link
+         */
+        if ( class_exists( 'Disciple_Tools_Magic_Links_Template_Single_Record' ) ) {
+            require_once 'magic-link/templates/assigned-to-team.php';
+        }
+
 
         /**
          * @todo Decide if you want to add a custom admin page in the admin area
          * To remove: delete the 3 lines below and remove the folder named /admin
          */
         if ( is_admin() ) {
-            require_once( 'admin/admin-menu-and-tabs.php' ); // adds starter admin page and section for plugin
+            require_once 'admin/admin-menu-and-tabs.php'; // adds starter admin page and section for plugin
         }
 
         /**
@@ -114,7 +122,6 @@ class Disciple_Tools_Team_Module {
          * To remove: delete the line below and remove the folder named /languages
          */
         $this->i18n();
-
     }
 
     /**
@@ -203,8 +210,8 @@ class Disciple_Tools_Team_Module {
 
 
 // Register activation hook.
-register_activation_hook( __FILE__, [ 'Disciple_Tools_Team_Module', 'activation' ] );
-register_deactivation_hook( __FILE__, [ 'Disciple_Tools_Team_Module', 'deactivation' ] );
+register_activation_hook( __FILE__, array( 'Disciple_Tools_Team_Module', 'activation' ) );
+register_deactivation_hook( __FILE__, array( 'Disciple_Tools_Team_Module', 'deactivation' ) );
 
 
 if ( ! function_exists( 'disciple_tools_team_module_hook_admin_notice' ) ) {
@@ -275,12 +282,12 @@ if ( !function_exists( 'dt_hook_ajax_notice_handler' ) ){
  * Also, see the instructions for version updating to understand the steps involved.
  * @see https://github.com/DiscipleTools/disciple-tools-version-control/wiki/How-to-Update-the-Starter-Plugin
  */
-add_action( 'plugins_loaded', function (){
+add_action( 'plugins_loaded', function () {
     if ( is_admin() && !( is_multisite() && class_exists( 'DT_Multisite' ) ) || wp_doing_cron() ){
         // Check for plugin updates
         if ( ! class_exists( 'Puc_v4_Factory' ) ) {
             if ( file_exists( get_template_directory() . '/dt-core/libraries/plugin-update-checker/plugin-update-checker.php' ) ){
-                require( get_template_directory() . '/dt-core/libraries/plugin-update-checker/plugin-update-checker.php' );
+                require get_template_directory() . '/dt-core/libraries/plugin-update-checker/plugin-update-checker.php';
             }
         }
         if ( class_exists( 'Puc_v4_Factory' ) ){
