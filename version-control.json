@@ -1,7 +1,7 @@
 {
   "name": "Disciple.Tools - Team Module",
-  "version": "1.0.0",
-  "last_updated": "2023-03-03",
+  "version": "1.1.0",
+  "last_updated": "2024-10-09",
   "author": "cairocoder01",
   "author_homepage": "https://github.com/cairocoder01",
   "git_owner": "cairocoder01",
@@ -15,7 +15,7 @@
   "license_url": "https://raw.githubusercontent.com/cairocoder01/disciple-tools-team-module/master/LICENSE",
   "readme_url": "https://raw.githubusercontent.com/cairocoder01/disciple-tools-team-module/master/README.md",
   "requires": "4.7",
-  "tested": "6.1",
+  "tested": "6.6.2",
   "upgrade_notice": "Upgrade to get the latest features.",
   "banners": {
     "low": "https://raw.githubusercontent.com/cairocoder01/disciple-tools-team-module/master/documentation/banner.png",
