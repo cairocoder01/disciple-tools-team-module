@@ -1,0 +1,15 @@
+#. Plugin Name of the plugin
+msgid "Disciple.Tools - Team Module"
+msgstr ""
+
+#. Description of the plugin
+msgid "The Team Module adds a way to access and share contacts and groups in a collaborative team setting."
+msgstr ""
+
+# Author URI of the plugin
+msgid "https://github.com/cairocoder01"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://github.com/cairocoder01/disciple-tools-team-module"
+msgstr ""

@@ -248,7 +248,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
 
     private static function get_user_teams() {
         // get contact connected with current user
-        $contact_id = get_user_option( 'corresponds_to_contact', get_current_user_id() ) ?: array();
+        $contact_id = get_user_option( 'corresponds_to_contact', get_current_user_id() ) ?? array();
 
         // get all teams this user is a member of
         $connections = p2p_get_connections( 'teams_to_contacts', array(
@@ -352,7 +352,7 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                 'query' => array(
                     'teams' => $user_team_ids,
                 ),
-                'count' => $total_my ?: null,
+                'count' => $total_my ?? null,
             );
 
             $can_view_single = current_user_can( 'access_specific_teams' ) && count( $user_team_ids ) === 1;
@@ -388,13 +388,11 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
             }
 
             // if has permission access_specific_teams and user.teams matches
-        } else {
+        } else if ( !current_user_can( "view_any_$post_type" ) && current_user_can( 'access_specific_teams' ) ) {
             //give user permission to all posts their team(s) are assigned to
-            if ( !current_user_can( "view_any_$post_type" ) && current_user_can( 'access_specific_teams' ) ) {
-                $team_ids = self::get_user_teams();
-                if ( !empty( $team_ids ) ){
-                    $permissions[] = array( 'teams' => $team_ids );
-                }
+            $team_ids = self::get_user_teams();
+            if ( !empty( $team_ids ) ){
+                $permissions[] = array( 'teams' => $team_ids );
             }
         }
         return $permissions;
@@ -402,13 +400,13 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
 
     /**
      * Check if current user is in teams that can access given post
-     * @param $has_permission
-     * @param $post_id
+     * @param bool $has_permission
+     * @param int $post_id
      * @return bool
      */
     public static function can_view_update_post( $has_permission, $post_id ) {
         if ( !$has_permission ) {
-            $contact_id = get_user_option( 'corresponds_to_contact', get_current_user_id() ) ?: array();
+            $contact_id = get_user_option( 'corresponds_to_contact', get_current_user_id() ) ?? array();
 
             // Get all posts that the user's teams are assigned to
             global $wpdb;
@@ -449,8 +447,8 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                 $has_permission = array_search( $post_id, $user_teams, false ) > -1;
             }
         } elseif ( current_user_can( 'access_specific_teams' ) ) {
-                //give user permission to all posts their team(s) are assigned to
-                $has_permission = self::can_view_update_post( $has_permission, $post_id );
+            //give user permission to all posts their team(s) are assigned to
+            $has_permission = self::can_view_update_post( $has_permission, $post_id );
         }
         return $has_permission;
     }
@@ -466,14 +464,14 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                     continue;
                 }
                 $compact[] = array(
-                    'ID' => $post['ID'],
-                    'name' => wp_specialchars_decode( $post['post_title'] ),
+                'ID' => $post['ID'],
+                'name' => wp_specialchars_decode( $post['post_title'] ),
                 );
             }
             return array(
-                'total' => $result['total'],
-                'raw' => $compact,
-                'posts' => DT_Posts::capture_viewable_compact_post_record_status( $post_type, array_slice( $compact, 0, 50 ) ),
+            'total' => $result['total'],
+            'raw' => $compact,
+            'posts' => DT_Posts::capture_viewable_compact_post_record_status( $post_type, array_slice( $compact, 0, 50 ) ),
             );
         }
         return $result;
