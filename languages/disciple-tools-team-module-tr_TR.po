@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Disciple.Tools - Team Module 1.0.1-beta\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/disciple-tools-"
 "team-module\n"
-"POT-Creation-Date: 2024-10-08T18:09:23+00:00\n"
+"POT-Creation-Date: 2024-10-23T10:00:10+00:00\n"
 "PO-Revision-Date: 2024-10-08 21:17+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -16,65 +16,62 @@ msgstr ""
 "X-Generator: Poedit 3.5\n"
 "X-Domain: disciple-tools-team-module\n"
 
-#: admin/admin-menu-and-tabs.php:40 admin/admin-menu-and-tabs.php:49
 #: post-type/loader.php:22
 msgid "Team Module"
 msgstr "Takım Modülü"
-
-#: magic-link/templates/assigned-to-team.php:246
-msgid "Team Contacts"
-msgstr "Takım Kişileri"
-
-#: magic-link/templates/assigned-to-team.php:254 post-type/module-base.php:59
-#: post-type/module-base.php:75 post-type/module-base.php:196
-msgid "Teams"
-msgstr "Takımlar"
-
-#: magic-link/templates/assigned-to-team.php:305
-msgid "You are not a member of a Team with contacts"
-msgstr "Kişilere sahip bir Takımın üyesi değilsiniz"
 
 #: post-type/loader.php:26
 msgid "Teams functionality"
 msgstr "Takım işlevselliği"
 
-#: post-type/module-base.php:58 post-type/module-base.php:74
-#: post-type/module-base.php:352
+#: post-type/module-base.php:57 post-type/module-base.php:73
+#: post-type/module-base.php:351
 msgid "Team"
 msgstr "Takım"
 
-#: post-type/module-base.php:112
+#: post-type/module-base.php:58 post-type/module-base.php:74
+#: post-type/module-base.php:195
+msgid "Teams"
+msgstr "Takımlar"
+
+#: post-type/module-base.php:111
 msgid "Team Member"
 msgstr "Takım Üyesi"
 
-#: post-type/module-base.php:120
+#: post-type/module-base.php:119
 msgid "Team Collaborator"
 msgstr "Takım İşbirlikçisi"
 
-#: post-type/module-base.php:129
+#: post-type/module-base.php:128
 msgid "Team Leader"
 msgstr "Takım Lideri"
 
-#: post-type/module-base.php:142
+#: post-type/module-base.php:141
 msgid "Teams Admin"
 msgstr "Takım Yöneticisi"
 
-#: post-type/module-base.php:183 post-type/module-base.php:232
+#: post-type/module-base.php:182 post-type/module-base.php:231
 msgid "Members"
 msgstr "Üyeler"
 
-#: post-type/module-base.php:184
+#: post-type/module-base.php:183
 msgid "Which contacts are members of this team."
 msgstr "Bu takımın üyeleri hangi kişilerdir."
 
-#: post-type/module-base.php:197
+#: post-type/module-base.php:196
 msgid "Which teams interact with and have access to this."
 msgstr "Bu takım ile etkileşime giren ve erişimi olan takımlar hangileridir."
 
-#: post-type/module-base.php:211
+#: post-type/module-base.php:210
 msgid "Member of Teams"
 msgstr "Takım Üyesi"
 
-#: post-type/module-base.php:233
+#: post-type/module-base.php:232
 msgid "Other"
 msgstr "Diğer"
+
+#~ msgid "Team Contacts"
+#~ msgstr "Takım Kişileri"
+
+#~ msgid "You are not a member of a Team with contacts"
+#~ msgstr "Kişilere sahip bir Takımın üyesi değilsiniz"

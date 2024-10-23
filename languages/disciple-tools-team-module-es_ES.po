@@ -1,80 +1,73 @@
+# Copyright (C) 2024 
+# This file is distributed under the same license as the Disciple.Tools - Team Module plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Disciple Tools - Team Module\n"
+"Project-Id-Version: Disciple.Tools - Team Module 1.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/disciple-tools-"
 "team-module\n"
 "POT-Creation-Date: 2024-10-23T10:00:10+00:00\n"
-"PO-Revision-Date: 2024-10-12 10:59+0000\n"
-"Last-Translator: Sarah <s.colpart@gmail.com>\n"
-"Language-Team: French <https://translate.disciple.tools/projects/disciple-"
-"tools/disciple-tools-team-module/fr_FR/>\n"
-"Language: fr_FR\n"
+"PO-Revision-Date: 2024-10-14 03:14+0000\n"
+"Last-Translator: Mike Allbutt <mikeallbutt@gmail.com>\n"
+"Language-Team: Spanish <https://translate.disciple.tools/projects/disciple-"
+"tools/disciple-tools-team-module/es_ES/>\n"
+"Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.7.2\n"
-"X-Poedit-Basepath: ..\n"
-"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
-"X-Poedit-WPHeader: disciple-tools-team-module.php\n"
-"X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
-"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
-"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
-"X-Poedit-SearchPath-0: .\n"
-"X-Poedit-SearchPathExcluded-0: *.js\n"
-"X-Poedit-SearchPathExcluded-1: */libraries/*\n"
+"X-Domain: disciple-tools-team-module\n"
 
 #: post-type/loader.php:22
 msgid "Team Module"
-msgstr ""
+msgstr "Módulo de equipo"
 
 #: post-type/loader.php:26
 msgid "Teams functionality"
-msgstr ""
+msgstr "Funcionalidad de los equipos"
 
 #: post-type/module-base.php:57 post-type/module-base.php:73
 #: post-type/module-base.php:351
 msgid "Team"
-msgstr "Équipe"
+msgstr "Equipo"
 
 #: post-type/module-base.php:58 post-type/module-base.php:74
 #: post-type/module-base.php:195
 msgid "Teams"
-msgstr "Équipes"
+msgstr "Equipos"
 
 #: post-type/module-base.php:111
 msgid "Team Member"
-msgstr ""
+msgstr "Miembro del equipo"
 
 #: post-type/module-base.php:119
 msgid "Team Collaborator"
-msgstr ""
+msgstr "Colaboradora de equipo"
 
 #: post-type/module-base.php:128
 msgid "Team Leader"
-msgstr ""
+msgstr "Líder de equipo"
 
 #: post-type/module-base.php:141
 msgid "Teams Admin"
-msgstr "Administrateur d'équipes"
+msgstr "Administrador de equipos"
 
 #: post-type/module-base.php:182 post-type/module-base.php:231
 msgid "Members"
-msgstr "Membres"
+msgstr "Miembros"
 
 #: post-type/module-base.php:183
 msgid "Which contacts are members of this team."
-msgstr "Quels contacts sont membres de cette équipe ?"
+msgstr "Cuales contactos son miembros de este equipo."
 
 #: post-type/module-base.php:196
 msgid "Which teams interact with and have access to this."
-msgstr "Quelles équipes interagissent avec et ont accès à ça ?"
+msgstr "Cuales equipos tienen interaccion y acceso a esto."
 
 #: post-type/module-base.php:210
 msgid "Member of Teams"
-msgstr "Membres d'équipes"
+msgstr "Miembro de equipos"
 
 #: post-type/module-base.php:232
 msgid "Other"
-msgstr "Autres"
+msgstr "Otro"
