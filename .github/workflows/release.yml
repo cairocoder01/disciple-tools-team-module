@@ -23,7 +23,7 @@ jobs:
       - name: Build project
         run: |
           mkdir disciple-tools-team-module
-          cp -r disciple-tools-team-module.php admin assets languages post-type spinner.svg version-control.json LICENSE SECURITY.md disciple-tools-team-module/
+          cp -r disciple-tools-team-module.php admin assets languages magic-link post-type spinner.svg version-control.json LICENSE SECURITY.md disciple-tools-team-module/
           zip -r disciple-tools-team-module.zip disciple-tools-team-module
       - name: Create Release
         id: create_release
