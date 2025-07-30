@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Disciple.Tools - Team Module 1.1.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/disciple-tools-"
 "team-module\n"
-"POT-Creation-Date: 2024-10-23T10:00:10+00:00\n"
+"POT-Creation-Date: 2025-07-30T14:11:56+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -24,14 +24,11 @@ msgstr ""
 msgid "Teams functionality"
 msgstr ""
 
-#: post-type/module-base.php:57
-#: post-type/module-base.php:73
-#: post-type/module-base.php:351
+#: post-type/module-base.php:57 post-type/module-base.php:73
 msgid "Team"
 msgstr ""
 
-#: post-type/module-base.php:58
-#: post-type/module-base.php:74
+#: post-type/module-base.php:58 post-type/module-base.php:74
 #: post-type/module-base.php:195
 msgid "Teams"
 msgstr ""
@@ -52,8 +49,7 @@ msgstr ""
 msgid "Teams Admin"
 msgstr ""
 
-#: post-type/module-base.php:182
-#: post-type/module-base.php:231
+#: post-type/module-base.php:182 post-type/module-base.php:231
 msgid "Members"
 msgstr ""
 
