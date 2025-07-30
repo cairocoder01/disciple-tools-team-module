@@ -344,11 +344,12 @@ class Disciple_Tools_Team_Module_Base extends DT_Module_Base {
                 );
             }
 
+            $settings = DT_Posts::get_post_settings( self::post_type() );
             // add assigned to team filters
             $filters['filters'][] = array(
                 'ID' => 'my_team',
                 'tab' => $tab,
-                'name' => __( 'Team', 'disciple-tools-team-module' ),
+                'name' => $settings['label_singular'],
                 'query' => array(
                     'teams' => $user_team_ids,
                 ),
