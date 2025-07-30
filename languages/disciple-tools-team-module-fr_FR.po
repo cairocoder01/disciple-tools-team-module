@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Disciple Tools - Team Module\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/disciple-tools-"
 "team-module\n"
-"POT-Creation-Date: 2024-10-23T10:00:10+00:00\n"
+"POT-Creation-Date: 2025-07-30T14:11:56+00:00\n"
 "PO-Revision-Date: 2024-10-12 10:59+0000\n"
 "Last-Translator: Sarah <s.colpart@gmail.com>\n"
 "Language-Team: French <https://translate.disciple.tools/projects/disciple-"
@@ -34,7 +34,6 @@ msgid "Teams functionality"
 msgstr ""
 
 #: post-type/module-base.php:57 post-type/module-base.php:73
-#: post-type/module-base.php:351
 msgid "Team"
 msgstr "Équipe"
 
