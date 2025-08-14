@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Disciple.Tools - Team Module 1.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/disciple-tools-"
 "team-module\n"
-"POT-Creation-Date: 2024-10-23T10:00:10+00:00\n"
+"POT-Creation-Date: 2025-08-14T10:46:01+00:00\n"
 "PO-Revision-Date: 2024-10-14 16:00+0000\n"
 "Last-Translator: Kyle Koval <kyle.koval@gmail.com>\n"
 "Language-Team: Italian <https://translate.disciple.tools/projects/disciple-"
@@ -27,47 +27,46 @@ msgid "Teams functionality"
 msgstr "Funzionalità del Team"
 
 #: post-type/module-base.php:57 post-type/module-base.php:73
-#: post-type/module-base.php:351
 msgid "Team"
 msgstr "Team"
 
 #: post-type/module-base.php:58 post-type/module-base.php:74
-#: post-type/module-base.php:195
+#: post-type/module-base.php:187
 msgid "Teams"
 msgstr "Teams"
 
-#: post-type/module-base.php:111
+#: post-type/module-base.php:110
 msgid "Team Member"
 msgstr "Membri del Team"
 
-#: post-type/module-base.php:119
+#: post-type/module-base.php:116
 msgid "Team Collaborator"
 msgstr "Collaboratore del Team"
 
-#: post-type/module-base.php:128
+#: post-type/module-base.php:123
 msgid "Team Leader"
 msgstr "Leader del Team"
 
-#: post-type/module-base.php:141
+#: post-type/module-base.php:134
 msgid "Teams Admin"
 msgstr "Amministratore dei Teams"
 
-#: post-type/module-base.php:182 post-type/module-base.php:231
+#: post-type/module-base.php:174 post-type/module-base.php:223
 msgid "Members"
 msgstr "Membri"
 
-#: post-type/module-base.php:183
+#: post-type/module-base.php:175
 msgid "Which contacts are members of this team."
 msgstr "Quali contatti sono membri di questo team."
 
-#: post-type/module-base.php:196
+#: post-type/module-base.php:188
 msgid "Which teams interact with and have access to this."
 msgstr "Quali team interagiscono e hanno accesso a questo."
 
-#: post-type/module-base.php:210
+#: post-type/module-base.php:202
 msgid "Member of Teams"
 msgstr "Membro dei Teams"
 
-#: post-type/module-base.php:232
+#: post-type/module-base.php:224
 msgid "Other"
 msgstr "Altro"
