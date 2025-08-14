@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Disciple.Tools - Team Module 1.1.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/disciple-tools-"
 "team-module\n"
-"POT-Creation-Date: 2024-10-23T10:00:10+00:00\n"
+"POT-Creation-Date: 2025-08-14T10:46:01+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -24,51 +24,47 @@ msgstr ""
 msgid "Teams functionality"
 msgstr ""
 
-#: post-type/module-base.php:57
-#: post-type/module-base.php:73
-#: post-type/module-base.php:351
+#: post-type/module-base.php:57 post-type/module-base.php:73
 msgid "Team"
 msgstr ""
 
-#: post-type/module-base.php:58
-#: post-type/module-base.php:74
-#: post-type/module-base.php:195
+#: post-type/module-base.php:58 post-type/module-base.php:74
+#: post-type/module-base.php:187
 msgid "Teams"
 msgstr ""
 
-#: post-type/module-base.php:111
+#: post-type/module-base.php:110
 msgid "Team Member"
 msgstr ""
 
-#: post-type/module-base.php:119
+#: post-type/module-base.php:116
 msgid "Team Collaborator"
 msgstr ""
 
-#: post-type/module-base.php:128
+#: post-type/module-base.php:123
 msgid "Team Leader"
 msgstr ""
 
-#: post-type/module-base.php:141
+#: post-type/module-base.php:134
 msgid "Teams Admin"
 msgstr ""
 
-#: post-type/module-base.php:182
-#: post-type/module-base.php:231
+#: post-type/module-base.php:174 post-type/module-base.php:223
 msgid "Members"
 msgstr ""
 
-#: post-type/module-base.php:183
+#: post-type/module-base.php:175
 msgid "Which contacts are members of this team."
 msgstr ""
 
-#: post-type/module-base.php:196
+#: post-type/module-base.php:188
 msgid "Which teams interact with and have access to this."
 msgstr ""
 
-#: post-type/module-base.php:210
+#: post-type/module-base.php:202
 msgid "Member of Teams"
 msgstr ""
 
-#: post-type/module-base.php:232
+#: post-type/module-base.php:224
 msgid "Other"
 msgstr ""
