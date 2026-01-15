@@ -1,14 +1,14 @@
-# Copyright (C) 2024 
+# Copyright (C) 2024
 # This file is distributed under the same license as the Disciple.Tools - Team Module plugin.
 msgid ""
 msgstr ""
 "Project-Id-Version: Disciple.Tools - Team Module 1.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/disciple-tools-"
 "team-module\n"
-"POT-Creation-Date: 2024-10-23T10:00:10+00:00\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"POT-Creation-Date: 2026-01-14T16:13:11+00:00\n"
+"PO-Revision-Date: 2026-01-14 12:00+0000\n"
 "Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"Language-Team: Punjabi (India)\n"
 "Language: pa_IN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,56 +16,64 @@ msgstr ""
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: disciple-tools-team-module\n"
 
+#: admin/admin-menu-and-tabs.php:40 admin/admin-menu-and-tabs.php:49
 #: post-type/loader.php:22
 msgid "Team Module"
-msgstr ""
+msgstr "ਟੀਮ ਮੌਡਿਊਲ"
+
+#: magic-link/templates/assigned-to-team.php:264
+msgid "Team Contacts"
+msgstr "ਟੀਮ ਸੰਪਰਕ"
+
+#: magic-link/templates/assigned-to-team.php:272 post-type/module-base.php:58
+#: post-type/module-base.php:74 post-type/module-base.php:187
+msgid "Teams"
+msgstr "ਟੀਮਾਂ"
+
+#: magic-link/templates/assigned-to-team.php:323
+msgid "You are not a member of a Team with contacts"
+msgstr "ਤੁਸੀਂ ਸੰਪਰਕਾਂ ਵਾਲੀ ਕਿਸੇ ਟੀਮ ਦੇ ਮੈਂਬਰ ਨਹੀਂ ਹੋ"
 
 #: post-type/loader.php:26
 msgid "Teams functionality"
-msgstr ""
+msgstr "ਟੀਮਾਂ ਦੀ ਕਾਰਜਸ਼ੀਲਤਾ"
 
 #: post-type/module-base.php:57 post-type/module-base.php:73
-#: post-type/module-base.php:351
 msgid "Team"
-msgstr ""
+msgstr "ਟੀਮ"
 
-#: post-type/module-base.php:58 post-type/module-base.php:74
-#: post-type/module-base.php:195
-msgid "Teams"
-msgstr ""
-
-#: post-type/module-base.php:111
+#: post-type/module-base.php:110
 msgid "Team Member"
-msgstr ""
+msgstr "ਟੀਮ ਮੈਂਬਰ"
 
-#: post-type/module-base.php:119
+#: post-type/module-base.php:116
 msgid "Team Collaborator"
-msgstr ""
+msgstr "ਟੀਮ ਸਹਿਯੋਗੀ"
 
-#: post-type/module-base.php:128
+#: post-type/module-base.php:123
 msgid "Team Leader"
-msgstr ""
+msgstr "ਟੀਮ ਲੀਡਰ"
 
-#: post-type/module-base.php:141
+#: post-type/module-base.php:134
 msgid "Teams Admin"
-msgstr ""
+msgstr "ਟੀਮਾਂ ਪ੍ਰਬੰਧਕ"
 
-#: post-type/module-base.php:182 post-type/module-base.php:231
+#: post-type/module-base.php:174 post-type/module-base.php:223
 msgid "Members"
-msgstr ""
+msgstr "ਮੈਂਬਰ"
 
-#: post-type/module-base.php:183
+#: post-type/module-base.php:175
 msgid "Which contacts are members of this team."
-msgstr ""
+msgstr "ਕਿਹੜੇ ਸੰਪਰਕ ਇਸ ਟੀਮ ਦੇ ਮੈਂਬਰ ਹਨ।"
 
-#: post-type/module-base.php:196
+#: post-type/module-base.php:188
 msgid "Which teams interact with and have access to this."
-msgstr ""
+msgstr "ਕਿਹੜੀਆਂ ਟੀਮਾਂ ਇਸ ਨਾਲ ਗੱਲਬਾਤ ਕਰਦੀਆਂ ਹਨ ਅਤੇ ਇਸ ਤੱਕ ਪਹੁੰਚ ਰੱਖਦੀਆਂ ਹਨ।"
 
-#: post-type/module-base.php:210
+#: post-type/module-base.php:202
 msgid "Member of Teams"
-msgstr ""
+msgstr "ਟੀਮਾਂ ਦੇ ਮੈਂਬਰ"
 
-#: post-type/module-base.php:232
+#: post-type/module-base.php:224
 msgid "Other"
-msgstr ""
+msgstr "ਹੋਰ"
