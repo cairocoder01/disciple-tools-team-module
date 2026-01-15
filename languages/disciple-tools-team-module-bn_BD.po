@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Disciple.Tools - Team Module 1.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/disciple-tools-"
 "team-module\n"
-"POT-Creation-Date: 2024-10-23T10:00:10+00:00\n"
+"POT-Creation-Date: 2026-01-14T16:13:11+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -16,56 +16,64 @@ msgstr ""
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: disciple-tools-team-module\n"
 
+#: admin/admin-menu-and-tabs.php:40 admin/admin-menu-and-tabs.php:49
 #: post-type/loader.php:22
 msgid "Team Module"
-msgstr ""
+msgstr "টিম মডিউল"
+
+#: magic-link/templates/assigned-to-team.php:264
+msgid "Team Contacts"
+msgstr "টিম যোগাযোগসমূহ"
+
+#: magic-link/templates/assigned-to-team.php:272 post-type/module-base.php:58
+#: post-type/module-base.php:74 post-type/module-base.php:187
+msgid "Teams"
+msgstr "টিমসমূহ"
+
+#: magic-link/templates/assigned-to-team.php:323
+msgid "You are not a member of a Team with contacts"
+msgstr "আপনি যোগাযোগসহ কোনো টিমের সদস্য নন"
 
 #: post-type/loader.php:26
 msgid "Teams functionality"
-msgstr ""
+msgstr "টিম কার্যকারিতা"
 
 #: post-type/module-base.php:57 post-type/module-base.php:73
-#: post-type/module-base.php:351
 msgid "Team"
-msgstr ""
+msgstr "টিম"
 
-#: post-type/module-base.php:58 post-type/module-base.php:74
-#: post-type/module-base.php:195
-msgid "Teams"
-msgstr ""
-
-#: post-type/module-base.php:111
+#: post-type/module-base.php:110
 msgid "Team Member"
-msgstr ""
+msgstr "টিম সদস্য"
 
-#: post-type/module-base.php:119
+#: post-type/module-base.php:116
 msgid "Team Collaborator"
-msgstr ""
+msgstr "টিম সহযোগী"
 
-#: post-type/module-base.php:128
+#: post-type/module-base.php:123
 msgid "Team Leader"
-msgstr ""
+msgstr "টিম লিডার"
 
-#: post-type/module-base.php:141
+#: post-type/module-base.php:134
 msgid "Teams Admin"
-msgstr ""
+msgstr "টিম অ্যাডমিন"
 
-#: post-type/module-base.php:182 post-type/module-base.php:231
+#: post-type/module-base.php:174 post-type/module-base.php:223
 msgid "Members"
-msgstr ""
+msgstr "সদস্যবৃন্দ"
 
-#: post-type/module-base.php:183
+#: post-type/module-base.php:175
 msgid "Which contacts are members of this team."
-msgstr ""
+msgstr "কোন যোগাযোগগুলো এই টিমের সদস্য।"
 
-#: post-type/module-base.php:196
+#: post-type/module-base.php:188
 msgid "Which teams interact with and have access to this."
-msgstr ""
+msgstr "কোন টিমগুলো এটির সাথে যোগাযোগ করে এবং এতে অ্যাক্সেস আছে।"
 
-#: post-type/module-base.php:210
+#: post-type/module-base.php:202
 msgid "Member of Teams"
-msgstr ""
+msgstr "টিমের সদস্য"
 
-#: post-type/module-base.php:232
+#: post-type/module-base.php:224
 msgid "Other"
-msgstr ""
+msgstr "অন্যান্য"

@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Disciple.Tools - Team Module 1.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/disciple-tools-"
 "team-module\n"
-"POT-Creation-Date: 2024-10-23T10:00:10+00:00\n"
+"POT-Creation-Date: 2026-01-14T16:13:11+00:00\n"
 "PO-Revision-Date: 2024-10-14 03:14+0000\n"
 "Last-Translator: Mike Allbutt <mikeallbutt@gmail.com>\n"
 "Language-Team: Spanish <https://translate.disciple.tools/projects/disciple-"
@@ -18,56 +18,64 @@ msgstr ""
 "X-Generator: Weblate 5.7.2\n"
 "X-Domain: disciple-tools-team-module\n"
 
+#: admin/admin-menu-and-tabs.php:40 admin/admin-menu-and-tabs.php:49
 #: post-type/loader.php:22
 msgid "Team Module"
 msgstr "Módulo de equipo"
+
+#: magic-link/templates/assigned-to-team.php:264
+msgid "Team Contacts"
+msgstr "Contactos del equipo"
+
+#: magic-link/templates/assigned-to-team.php:272 post-type/module-base.php:58
+#: post-type/module-base.php:74 post-type/module-base.php:187
+msgid "Teams"
+msgstr "Equipos"
+
+#: magic-link/templates/assigned-to-team.php:323
+msgid "You are not a member of a Team with contacts"
+msgstr "No eres miembro de un equipo con contactos"
 
 #: post-type/loader.php:26
 msgid "Teams functionality"
 msgstr "Funcionalidad de los equipos"
 
 #: post-type/module-base.php:57 post-type/module-base.php:73
-#: post-type/module-base.php:351
 msgid "Team"
 msgstr "Equipo"
 
-#: post-type/module-base.php:58 post-type/module-base.php:74
-#: post-type/module-base.php:195
-msgid "Teams"
-msgstr "Equipos"
-
-#: post-type/module-base.php:111
+#: post-type/module-base.php:110
 msgid "Team Member"
 msgstr "Miembro del equipo"
 
-#: post-type/module-base.php:119
+#: post-type/module-base.php:116
 msgid "Team Collaborator"
-msgstr "Colaboradora de equipo"
+msgstr "Colaborador de equipo"
 
-#: post-type/module-base.php:128
+#: post-type/module-base.php:123
 msgid "Team Leader"
 msgstr "Líder de equipo"
 
-#: post-type/module-base.php:141
+#: post-type/module-base.php:134
 msgid "Teams Admin"
 msgstr "Administrador de equipos"
 
-#: post-type/module-base.php:182 post-type/module-base.php:231
+#: post-type/module-base.php:174 post-type/module-base.php:223
 msgid "Members"
 msgstr "Miembros"
 
-#: post-type/module-base.php:183
+#: post-type/module-base.php:175
 msgid "Which contacts are members of this team."
-msgstr "Cuales contactos son miembros de este equipo."
+msgstr "Qué contactos son miembros de este equipo."
 
-#: post-type/module-base.php:196
+#: post-type/module-base.php:188
 msgid "Which teams interact with and have access to this."
-msgstr "Cuales equipos tienen interaccion y acceso a esto."
+msgstr "Qué equipos interactúan y tienen acceso a esto."
 
-#: post-type/module-base.php:210
+#: post-type/module-base.php:202
 msgid "Member of Teams"
 msgstr "Miembro de equipos"
 
-#: post-type/module-base.php:232
+#: post-type/module-base.php:224
 msgid "Other"
 msgstr "Otro"

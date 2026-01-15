@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Disciple Tools - Team Module\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/disciple-tools-"
 "team-module\n"
-"POT-Creation-Date: 2024-10-23T10:00:10+00:00\n"
+"POT-Creation-Date: 2026-01-14T16:13:11+00:00\n"
 "PO-Revision-Date: 2024-10-12 10:59+0000\n"
 "Last-Translator: Sarah <s.colpart@gmail.com>\n"
 "Language-Team: French <https://translate.disciple.tools/projects/disciple-"
@@ -18,63 +18,70 @@ msgstr ""
 "X-Poedit-Flags-xgettext: --add-comments=translators:\n"
 "X-Poedit-WPHeader: disciple-tools-team-module.php\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
-"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
-"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-KeywordsList: "
+"__;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 "X-Poedit-SearchPathExcluded-1: */libraries/*\n"
 
+#: admin/admin-menu-and-tabs.php:40 admin/admin-menu-and-tabs.php:49
 #: post-type/loader.php:22
 msgid "Team Module"
-msgstr ""
+msgstr "Module Équipes"
 
-#: post-type/loader.php:26
-msgid "Teams functionality"
-msgstr ""
+#: magic-link/templates/assigned-to-team.php:264
+msgid "Team Contacts"
+msgstr "Contacts de l'équipe"
 
-#: post-type/module-base.php:57 post-type/module-base.php:73
-#: post-type/module-base.php:351
-msgid "Team"
-msgstr "Équipe"
-
-#: post-type/module-base.php:58 post-type/module-base.php:74
-#: post-type/module-base.php:195
+#: magic-link/templates/assigned-to-team.php:272 post-type/module-base.php:58
+#: post-type/module-base.php:74 post-type/module-base.php:187
 msgid "Teams"
 msgstr "Équipes"
 
-#: post-type/module-base.php:111
+#: magic-link/templates/assigned-to-team.php:323
+msgid "You are not a member of a Team with contacts"
+msgstr "Vous n'êtes pas membre d'une équipe ayant des contacts"
+
+#: post-type/loader.php:26
+msgid "Teams functionality"
+msgstr "Fonctionnalité des équipes"
+
+#: post-type/module-base.php:57 post-type/module-base.php:73
+msgid "Team"
+msgstr "Équipe"
+
+#: post-type/module-base.php:110
 msgid "Team Member"
-msgstr ""
+msgstr "Membre d'équipe"
 
-#: post-type/module-base.php:119
+#: post-type/module-base.php:116
 msgid "Team Collaborator"
-msgstr ""
+msgstr "Collaborateur d'équipe"
 
-#: post-type/module-base.php:128
+#: post-type/module-base.php:123
 msgid "Team Leader"
-msgstr ""
+msgstr "Chef d'équipe"
 
-#: post-type/module-base.php:141
+#: post-type/module-base.php:134
 msgid "Teams Admin"
 msgstr "Administrateur d'équipes"
 
-#: post-type/module-base.php:182 post-type/module-base.php:231
+#: post-type/module-base.php:174 post-type/module-base.php:223
 msgid "Members"
 msgstr "Membres"
 
-#: post-type/module-base.php:183
+#: post-type/module-base.php:175
 msgid "Which contacts are members of this team."
-msgstr "Quels contacts sont membres de cette équipe ?"
+msgstr "Contacts qui sont membres de cette équipe."
 
-#: post-type/module-base.php:196
+#: post-type/module-base.php:188
 msgid "Which teams interact with and have access to this."
-msgstr "Quelles équipes interagissent avec et ont accès à ça ?"
+msgstr "Équipes qui interagissent avec et ont accès à ceci."
 
-#: post-type/module-base.php:210
+#: post-type/module-base.php:202
 msgid "Member of Teams"
-msgstr "Membres d'équipes"
+msgstr "Membre d'équipes"
 
-#: post-type/module-base.php:232
+#: post-type/module-base.php:224
 msgid "Other"
-msgstr "Autres"
+msgstr "Autre"

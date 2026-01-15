@@ -1,12 +1,12 @@
-# Copyright (C) 2024 
+# Copyright (C) 2024
 # This file is distributed under the same license as the Disciple.Tools - Team Module plugin.
 msgid ""
 msgstr ""
 "Project-Id-Version: Disciple.Tools - Team Module 1.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/disciple-tools-"
 "team-module\n"
-"POT-Creation-Date: 2024-10-23T10:00:10+00:00\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"POT-Creation-Date: 2026-01-14T16:13:11+00:00\n"
+"PO-Revision-Date: 2026-01-14 12:00+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: my_MM\n"
@@ -16,56 +16,64 @@ msgstr ""
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: disciple-tools-team-module\n"
 
+#: admin/admin-menu-and-tabs.php:40 admin/admin-menu-and-tabs.php:49
 #: post-type/loader.php:22
 msgid "Team Module"
-msgstr ""
+msgstr "အဖွဲ့ မော်ဂျူး"
+
+#: magic-link/templates/assigned-to-team.php:264
+msgid "Team Contacts"
+msgstr "အဖွဲ့ အဆက်အသွယ်များ"
+
+#: magic-link/templates/assigned-to-team.php:272 post-type/module-base.php:58
+#: post-type/module-base.php:74 post-type/module-base.php:187
+msgid "Teams"
+msgstr "အဖွဲ့များ"
+
+#: magic-link/templates/assigned-to-team.php:323
+msgid "You are not a member of a Team with contacts"
+msgstr "သင်သည် အဆက်အသွယ်များရှိသော အဖွဲ့တစ်ခု၏ အဖွဲ့ဝင်မဟုတ်ပါ"
 
 #: post-type/loader.php:26
 msgid "Teams functionality"
-msgstr ""
+msgstr "အဖွဲ့များ လုပ်ဆောင်ချက်"
 
 #: post-type/module-base.php:57 post-type/module-base.php:73
-#: post-type/module-base.php:351
 msgid "Team"
-msgstr ""
+msgstr "အဖွဲ့"
 
-#: post-type/module-base.php:58 post-type/module-base.php:74
-#: post-type/module-base.php:195
-msgid "Teams"
-msgstr ""
-
-#: post-type/module-base.php:111
+#: post-type/module-base.php:110
 msgid "Team Member"
-msgstr ""
+msgstr "အဖွဲ့ဝင်"
 
-#: post-type/module-base.php:119
+#: post-type/module-base.php:116
 msgid "Team Collaborator"
-msgstr ""
+msgstr "အဖွဲ့ ပူးပေါင်းဆောင်ရွက်သူ"
 
-#: post-type/module-base.php:128
+#: post-type/module-base.php:123
 msgid "Team Leader"
-msgstr ""
+msgstr "အဖွဲ့ခေါင်းဆောင်"
 
-#: post-type/module-base.php:141
+#: post-type/module-base.php:134
 msgid "Teams Admin"
-msgstr ""
+msgstr "အဖွဲ့များ စီမံခန့်ခွဲသူ"
 
-#: post-type/module-base.php:182 post-type/module-base.php:231
+#: post-type/module-base.php:174 post-type/module-base.php:223
 msgid "Members"
-msgstr ""
+msgstr "အဖွဲ့ဝင်များ"
 
-#: post-type/module-base.php:183
+#: post-type/module-base.php:175
 msgid "Which contacts are members of this team."
-msgstr ""
+msgstr "မည်သည့် အဆက်အသွယ်များသည် ဤအဖွဲ့၏ အဖွဲ့ဝင်များဖြစ်သနည်း။"
 
-#: post-type/module-base.php:196
+#: post-type/module-base.php:188
 msgid "Which teams interact with and have access to this."
-msgstr ""
+msgstr "မည်သည့် အဖွဲ့များသည် ၎င်းနှင့် ဆက်သွယ်ပြီး ဝင်ရောက်ခွင့်ရှိသနည်း။"
 
-#: post-type/module-base.php:210
+#: post-type/module-base.php:202
 msgid "Member of Teams"
-msgstr ""
+msgstr "အဖွဲ့များ၏ အဖွဲ့ဝင်"
 
-#: post-type/module-base.php:232
+#: post-type/module-base.php:224
 msgid "Other"
-msgstr ""
+msgstr "အခြား"
