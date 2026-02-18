@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Disciple Tools - Team Module\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/disciple-tools-"
 "team-module\n"
-"POT-Creation-Date: 2026-01-14T16:13:11+00:00\n"
+"POT-Creation-Date: 2026-02-18T10:07:19+00:00\n"
 "PO-Revision-Date: 2024-10-12 10:59+0000\n"
 "Last-Translator: Sarah <s.colpart@gmail.com>\n"
 "Language-Team: French <https://translate.disciple.tools/projects/disciple-"
@@ -25,23 +25,9 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 "X-Poedit-SearchPathExcluded-1: */libraries/*\n"
 
-#: admin/admin-menu-and-tabs.php:40 admin/admin-menu-and-tabs.php:49
 #: post-type/loader.php:22
 msgid "Team Module"
 msgstr "Module Équipes"
-
-#: magic-link/templates/assigned-to-team.php:264
-msgid "Team Contacts"
-msgstr "Contacts de l'équipe"
-
-#: magic-link/templates/assigned-to-team.php:272 post-type/module-base.php:58
-#: post-type/module-base.php:74 post-type/module-base.php:187
-msgid "Teams"
-msgstr "Équipes"
-
-#: magic-link/templates/assigned-to-team.php:323
-msgid "You are not a member of a Team with contacts"
-msgstr "Vous n'êtes pas membre d'une équipe ayant des contacts"
 
 #: post-type/loader.php:26
 msgid "Teams functionality"
@@ -50,6 +36,11 @@ msgstr "Fonctionnalité des équipes"
 #: post-type/module-base.php:57 post-type/module-base.php:73
 msgid "Team"
 msgstr "Équipe"
+
+#: post-type/module-base.php:58 post-type/module-base.php:74
+#: post-type/module-base.php:187
+msgid "Teams"
+msgstr "Équipes"
 
 #: post-type/module-base.php:110
 msgid "Team Member"
@@ -86,3 +77,9 @@ msgstr "Membre d'équipes"
 #: post-type/module-base.php:224
 msgid "Other"
 msgstr "Autre"
+
+#~ msgid "Team Contacts"
+#~ msgstr "Contacts de l'équipe"
+
+#~ msgid "You are not a member of a Team with contacts"
+#~ msgstr "Vous n'êtes pas membre d'une équipe ayant des contacts"

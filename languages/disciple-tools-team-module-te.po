@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Disciple.Tools - Team Module 1.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/disciple-tools-"
 "team-module\n"
-"POT-Creation-Date: 2026-01-14T16:13:11+00:00\n"
+"POT-Creation-Date: 2026-02-18T10:07:19+00:00\n"
 "PO-Revision-Date: 2026-01-14 12:00+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: Telugu\n"
@@ -16,23 +16,9 @@ msgstr ""
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: disciple-tools-team-module\n"
 
-#: admin/admin-menu-and-tabs.php:40 admin/admin-menu-and-tabs.php:49
 #: post-type/loader.php:22
 msgid "Team Module"
 msgstr "బృందం మాడ్యూల్"
-
-#: magic-link/templates/assigned-to-team.php:264
-msgid "Team Contacts"
-msgstr "బృంద సంప్రదింపులు"
-
-#: magic-link/templates/assigned-to-team.php:272 post-type/module-base.php:58
-#: post-type/module-base.php:74 post-type/module-base.php:187
-msgid "Teams"
-msgstr "బృందాలు"
-
-#: magic-link/templates/assigned-to-team.php:323
-msgid "You are not a member of a Team with contacts"
-msgstr "మీరు సంప్రదింపులు ఉన్న బృందంలో సభ్యులు కాదు"
 
 #: post-type/loader.php:26
 msgid "Teams functionality"
@@ -41,6 +27,11 @@ msgstr "బృందాల కార్యాచరణ"
 #: post-type/module-base.php:57 post-type/module-base.php:73
 msgid "Team"
 msgstr "బృందం"
+
+#: post-type/module-base.php:58 post-type/module-base.php:74
+#: post-type/module-base.php:187
+msgid "Teams"
+msgstr "బృందాలు"
 
 #: post-type/module-base.php:110
 msgid "Team Member"
@@ -77,3 +68,9 @@ msgstr "బృందాల సభ్యుడు"
 #: post-type/module-base.php:224
 msgid "Other"
 msgstr "ఇతర"
+
+#~ msgid "Team Contacts"
+#~ msgstr "బృంద సంప్రదింపులు"
+
+#~ msgid "You are not a member of a Team with contacts"
+#~ msgstr "మీరు సంప్రదింపులు ఉన్న బృందంలో సభ్యులు కాదు"
