@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Disciple.Tools - Team Module 1.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/disciple-tools-"
 "team-module\n"
-"POT-Creation-Date: 2026-01-14T16:13:11+00:00\n"
+"POT-Creation-Date: 2026-02-18T10:07:19+00:00\n"
 "PO-Revision-Date: 2026-01-14 12:00+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: Polish\n"
@@ -18,23 +18,9 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 "
 "|| n%100>14) ? 1 : 2);\n"
 
-#: admin/admin-menu-and-tabs.php:40 admin/admin-menu-and-tabs.php:49
 #: post-type/loader.php:22
 msgid "Team Module"
 msgstr "Moduł zespołów"
-
-#: magic-link/templates/assigned-to-team.php:264
-msgid "Team Contacts"
-msgstr "Kontakty zespołu"
-
-#: magic-link/templates/assigned-to-team.php:272 post-type/module-base.php:58
-#: post-type/module-base.php:74 post-type/module-base.php:187
-msgid "Teams"
-msgstr "Zespoły"
-
-#: magic-link/templates/assigned-to-team.php:323
-msgid "You are not a member of a Team with contacts"
-msgstr "Nie jesteś członkiem zespołu, który ma kontakty"
 
 #: post-type/loader.php:26
 msgid "Teams functionality"
@@ -43,6 +29,11 @@ msgstr "Funkcjonalność zespołów"
 #: post-type/module-base.php:57 post-type/module-base.php:73
 msgid "Team"
 msgstr "Zespół"
+
+#: post-type/module-base.php:58 post-type/module-base.php:74
+#: post-type/module-base.php:187
+msgid "Teams"
+msgstr "Zespoły"
 
 #: post-type/module-base.php:110
 msgid "Team Member"
@@ -79,3 +70,9 @@ msgstr "Członek zespołów"
 #: post-type/module-base.php:224
 msgid "Other"
 msgstr "Inne"
+
+#~ msgid "Team Contacts"
+#~ msgstr "Kontakty zespołu"
+
+#~ msgid "You are not a member of a Team with contacts"
+#~ msgstr "Nie jesteś członkiem zespołu, który ma kontakty"
